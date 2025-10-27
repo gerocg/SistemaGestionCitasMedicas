@@ -1,0 +1,33 @@
+header {
+    display: flex;
+    padding-inline: 16px;
+    padding-block: 8px;
+    background-color: #00000033;
+    align-items: center;
+    justify-content: space-between;
+
+    h1 {
+        &:hover {
+            color: rgb(63, 62, 62);
+        }
+        cursor: pointer;
+    }
+
+    nav {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        ul {
+            list-style: none;
+
+            li {
+                &:hover {
+                    color: rgb(63, 62, 62);
+                }
+                cursor: pointer;
+            }
+        }
+    }
+}
