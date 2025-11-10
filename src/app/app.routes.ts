@@ -17,4 +17,8 @@ export const routes: Routes = [
         path: 'recuperarContrasenia',
         loadComponent: () => import('./components/recuperar-contrasenia/recuperar-contrasenia').then(m => m.RecuperarContrasenia)
     },
+    {
+        path: 'inicio',
+        loadComponent: () => import('./components/inicio/inicio').then(m => m.Inicio)
+    },
 ];

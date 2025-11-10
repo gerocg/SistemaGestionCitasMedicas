@@ -12,8 +12,8 @@ export class LoginService {
 
   public Login(usuario: string, contrasenia: string) {
     return this.http.post<any>(this.urlBase, {
-      usuario: usuario,
-      contrasenia: contrasenia
+      usuario_paciente: usuario,
+      contrasenia_paciente: contrasenia
     });
   }
 
