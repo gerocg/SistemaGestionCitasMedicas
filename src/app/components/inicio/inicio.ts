@@ -11,14 +11,11 @@ export class Inicio {
   usuario: any = null;
 
   constructor(private router: Router) {
-    const datos = localStorage.getItem('usuario');
-    if (datos) {
-      this.usuario = JSON.parse(datos);
+    if (typeof window !== 'undefined' && localStorage) {
+      const datos = localStorage.getItem('usuario');
+      if (datos) {
+        this.usuario = JSON.parse(datos);
+      }
     }
-  }
-
-  logout() {
-    localStorage.removeItem('usuario');
-    this.router.navigate(['/login']);
   }
 }
