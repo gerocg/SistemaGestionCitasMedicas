@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { LoginService } from '../../login-service';
+import { LoginService } from '../../services/login-service';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
@@ -27,7 +27,7 @@ export class Login {
   }
 
   onLogin(){
-    this.LoginService.Login('gero123', '12345').subscribe({
+    this.LoginService.Login(this.usuario, this.contrasenia).subscribe({
       next: (data) => {
         console.log('Login exitoso:', data);
         localStorage.setItem('usuario', JSON.stringify(data));
