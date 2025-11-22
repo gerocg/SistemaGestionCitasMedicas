@@ -1,41 +1,24 @@
 <div class="d-flex justify-content-center align-items-center bg-light" style="height: 100vh;">
   <div class="card shadow p-4" style="width: 80%; max-width: 400px;">
     <h3 class="text-center mb-4 texto-primary">Registro</h3>
-    <form (ngSubmit)="onRegister()">
-      <div class="mb-3">
-        <label class="form-label">Ingrese su usuario</label>
-        <input [(ngModel)]="usuario" name="usuario" type="text" class="form-control" placeholder="Nombre de usuario" required>
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Ingrese su nombre</label>
-        <input [(ngModel)]="nombre" name="nombre" type="text" class="form-control" placeholder="Nombre completo" required>
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Ingrese su e-mail</label>
-        <input [(ngModel)]="email" name="email" type="email" class="form-control" placeholder="E-mail" required>
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Ingrese su dirección</label>
-        <input [(ngModel)]="direccion" name="direccion" type="text" class="form-control" placeholder="Ingrese su dirección" required>
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Ingrese su teléfono</label>
-        <input [(ngModel)]="telefono" name="telefono" type="text" class="form-control" placeholder="Teléfono" required>
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Ingrese su fecha de nacimiento</label>
-        <input [(ngModel)]="fechaNacimiento" name="fechaNacimiento" type="date" class="form-control" required>
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Ingrese su contraseña</label>
-        <input [(ngModel)]="contrasenia" name="contrasenia" type="password" class="form-control" placeholder="Contraseña" required>
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Confirmar contraseña</label>
-        <input [(ngModel)]="confirmarContrasenia" name="confirmarContrasenia" type="password" class="form-control" placeholder="Repetir contraseña" required>
-        <p *ngIf="confirmarContrasenia && contrasenia !== confirmarContrasenia" style="color: red;">Las contraseñas no coinciden</p>
-      </div>
-      <button type="submit" class="btn-color w-100">Registrarme</button>
+    <form>
+        <div class="mb-3">
+            <label class="form-label">Ingrese su nombre</label>
+            <input type="text" class="form-control" placeholder="Nombre completo">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Ingrese su e-mail</label>
+            <input type="email" class="form-control" placeholder="E-mail">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Ingrese su contraseña</label>
+            <input type="password" class="form-control" placeholder="Contraseña">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Confirmar contraseña</label>
+            <input type="password" class="form-control" placeholder="Repetir contraseña">
+        </div>
+      <button type="button" class="btn-color w-100">Registrarme</button>
     </form>
     <div class="text-center mt-3">
       <a routerLink="/login" class="d-block texto-primary">Iniciar sesión</a>
