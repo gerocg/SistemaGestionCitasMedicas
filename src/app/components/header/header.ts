@@ -13,14 +13,11 @@ export class Header {
   menuAbierto = false;
 
   constructor() {
-     // Solo accedemos a localStorage si existe 'window'
-    if (typeof window !== 'undefined') {
-      this.usuarioLogueado.set(!!localStorage.getItem('usuario'));
+    this.usuarioLogueado.set(!!localStorage.getItem('usuario'));
 
-      window.addEventListener('storage', () => {
-        this.usuarioLogueado.set(!!localStorage.getItem('usuario'));
-      });
-    }
+    window.addEventListener('storage', () => {
+      this.usuarioLogueado.set(!!localStorage.getItem('usuario'));
+    });
   }
 
   cambioEstadoMenu() {
@@ -32,10 +29,8 @@ export class Header {
   }
 
   cerrarSesion() {
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('usuario');
-      this.usuarioLogueado.set(false);
-    }
+    localStorage.removeItem('usuario');
+    this.usuarioLogueado.set(false);
     this.cerrarMenu();
   }
 }

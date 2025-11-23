@@ -32,6 +32,8 @@ export class Login {
         console.log('Login exitoso:', data);
         localStorage.setItem('usuario', JSON.stringify(data));
         this.router.navigate(['/inicio']);
+        this.usuario = '';
+        this.contrasenia = '';
       },
       error: (error) => {
         console.error('Error en el login:', error);

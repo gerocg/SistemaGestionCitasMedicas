@@ -6,3 +6,12 @@ a:hover {
   color: rgb(20, 150, 115);
   text-decoration: underline;
 }
+
+.contenedor-btn{
+    display: flex;
+    justify-content: space-around;
+    gap: 10px;  
+}
+.contenedor-btn button {
+    flex: 1;
+}

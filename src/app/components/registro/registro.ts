@@ -15,14 +15,13 @@ export class Registro {
    RegisterService = inject(RegisterService);
   constructor(private router: Router) {}
 
-  usuario = '';
-  contrasenia = '';
-  confirmarContrasenia = '';
-  nombre = '';
-  email = '';
-  direccion = '';
-  fechaNacimiento = '';
-  telefono = '';
+  paso: number = 1;
+  nombre: string = '';
+  email: string = '';
+  telefono: string= '';
+  fechaNacimiento: string = '';
+  contrasenia: string = '';
+  confirmarContrasenia: string = '';
 
   onRegister() {
     const fechaISO = this.fechaNacimiento ? new Date(this.fechaNacimiento).toISOString() : '';
@@ -33,11 +32,9 @@ export class Registro {
     }
 
     this.RegisterService.Register(
-      this.usuario,
-      this.contrasenia,
       this.nombre,
+      this.contrasenia,
       this.email,
-      this.direccion,
       fechaISO,
       this.telefono
     ).subscribe({
@@ -55,5 +52,17 @@ export class Registro {
         }
       }
     });
+  }
+
+  siguiente() {
+    this.paso++;
+  }
+
+  atras() {
+    this.paso--;
+  }
+
+  esUltimoPaso() {
+    return this.paso === 3;
   }
 }
