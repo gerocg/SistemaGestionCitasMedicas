@@ -1,3 +1,11 @@
-<app-header></app-header>
-<h2>Bienvenido, {{ usuario?.nombre || 'usuario' }}!</h2>
-<p>Tu usuario es: {{ usuario?.usuario }}</p>
+<app-header (abrirMenu)="sidebarAbierto = !sidebarAbierto"></app-header>
+
+<div class="layout-container">
+
+  <app-sidebar [abierto]="sidebarAbierto" (cerrar)="sidebarAbierto = false"></app-sidebar>
+
+  <div class="content-wrap">
+    <router-outlet></router-outlet>
+  </div>
+
+</div>

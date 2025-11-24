@@ -1,11 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { LoginService } from '../../services/login-service';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { PacientesService } from '../../services/pacientes-services';
 
-
- 
 
 @Component({
   selector: 'app-login',
@@ -15,19 +13,14 @@ import { Router } from '@angular/router';
   styleUrl: './login.css',
 })
 
-export class Login {
-  LoginService = inject(LoginService);
-
-  
+export class Login {  
   usuario: string = '';
   contrasenia: string = '';
 
-  constructor(private router: Router) { 
-    
-  }
+  constructor(private router: Router, private pacientes_service: PacientesService) { }
 
   onLogin(){
-    this.LoginService.Login(this.usuario, this.contrasenia).subscribe({
+    this.pacientes_service.Login(this.usuario, this.contrasenia).subscribe({
       next: (data) => {
         console.log('Login exitoso:', data);
         localStorage.setItem('usuario', JSON.stringify(data));

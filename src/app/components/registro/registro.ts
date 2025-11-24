@@ -1,9 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { RegisterService } from '../../services/register-service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { PacientesService } from '../../services/pacientes-services';
 
 @Component({
   selector: 'app-registro',
@@ -12,8 +12,7 @@ import { Router } from '@angular/router';
   styleUrl: './registro.css',
 })
 export class Registro {
-   RegisterService = inject(RegisterService);
-  constructor(private router: Router) {}
+  constructor(private router: Router, private pacientes_service: PacientesService) {}
 
   paso: number = 1;
   nombre: string = '';
@@ -31,7 +30,7 @@ export class Registro {
       return;
     }
 
-    this.RegisterService.Register(
+    this.pacientes_service.Register(
       this.nombre,
       this.contrasenia,
       this.email,

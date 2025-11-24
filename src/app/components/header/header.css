@@ -1,25 +1,19 @@
-.nav-item a:hover{
-  text-decoration: underline;
-}
-
-.offcanvas {
+.navbar {
+  height: 60px;
   position: fixed;
   top: 0;
+  left: 0;
   right: 0;
-  height: 100%;
-  background-color: rgb(84 201 172);
-  transform: translateX(100%);
-  transition: transform 0.3s ease-in-out;
-  z-index: 1051;
+  background-color: #328A76;
+  z-index: 2000;
 }
 
-.backdrop {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0,0,0,0.4);
-  z-index: 1050;
-  opacity: 1;
-  transition: opacity 0.3s ease-in-out;
-  pointer-events: auto;
+.btn-outline-light:hover{
+    color: #328A76;
+}
+
+@media (max-width: 600px) {
+  #btnCerrarSesion {
+    display: none;
+  }
 }

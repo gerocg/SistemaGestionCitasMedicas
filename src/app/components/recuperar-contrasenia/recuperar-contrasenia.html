@@ -1,1 +1,16 @@
-<p>recuperar-contrasenia works!</p>
+<div class="d-flex justify-content-center align-items-center" style="height: 100vh; background-color: #328A76;">
+  <div class="card shadow p-4" style="width: 80%; max-width: 400px;">
+    <h3 class="text-center mb-4 texto-primary">Recupera tu contraseña</h3>
+    <form (ngSubmit)="recuperarContrasena()">
+      <div class="mb-3">
+        <label class="form-label">E-mail</label>
+        <input id="usuario" [(ngModel)]="email" name="usuario" type="text" class="form-control" placeholder="Ingrese su e-mail">
+      </div>
+      <button type="submit" class="btn-color w-100">Recuperar</button>
+    </form>
+    <div class="text-center mt-3">
+      <a routerLink="/registro" class="d-block texto-primary">¿No tenés cuenta? Registrate</a>
+      <a routerLink="/login" class="d-block texto-primary">Iniciar sesión</a>
+    </div>
+  </div>
+</div>

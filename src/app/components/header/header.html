@@ -1,42 +1,9 @@
-<nav class="navbar navbar-expand-lg navbar-dark px-4 background-primary">
-  <div class="container-fluid">
-    <a class="navbar-brand fw-bold" routerLink="/">Sistema de Citas Médicas</a>
-    
-    <button class="navbar-toggler" type="button" (click)="cambioEstadoMenu()">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+<nav class="navbar navbar-dark background-primary px-3">
+  <button class="navbar-toggler" (click)="abrirMenu.emit()">
+    <span class="navbar-toggler-icon"></span>
+  </button>
 
-    <div class="offcanvas offcanvas-end background-primary text-white" [ngClass]="{'show': menuAbierto}" tabindex="-1" id="offcanvasNav" style="max-width: 50%;">
-      <div class="offcanvas-header">
-        <h5 class="offcanvas-title">Menú</h5>
-        <button type="button" class="btn-close btn-close-white" (click)="cerrarMenu()"></button>
-      </div>
-      <div class="offcanvas-body">
-        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3" style="margin-top: 8px;">
-          <li class="nav-item">
-            <a class="nav-link text-white" routerLink="/" (click)="cerrarMenu()">Login</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-white" routerLink="/registro" (click)="cerrarMenu()">Registro</a>
-          </li>
-           @if (!usuarioLogueado()) {
-            <li class="nav-item">
-              <button class="btn btn-outline-light mt-2 w-100" (click)="cerrarSesion()">Cerrar sesión</button>
-              <a class="nav-link text-white" routerLink="/login" (click)="cerrarMenu()">Login</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" routerLink="/registro" (click)="cerrarMenu()">Registro</a>
-            </li>
-          } @else {
-            <li class="nav-item">
-              <button class="btn btn-outline-light mt-2 w-100" routerLink="/login" (click)="cerrarSesion()">Cerrar sesión</button>
-            </li>
-          }
-        </ul>
-      </div>
-    </div>
-</div>
+  <span class="navbar-brand flex-grow-1">Sistema de Citas</span>
+
+  <button id="btnCerrarSesion" class="btn btn-outline-light" (click)="cerrarSesion()">Cerrar sesión</button>
 </nav>
-@if(menuAbierto){
-    <div class="backdrop" (click)="cerrarMenu()"></div>
-}

@@ -1,36 +1,20 @@
 import { CommonModule } from '@angular/common';
-import { Component, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, EventEmitter, inject, Output, signal } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
-  imports: [RouterLink,  CommonModule],
+  imports: [CommonModule],
   templateUrl: './header.html',
   styleUrl: './header.css',
 })
 export class Header {
-  usuarioLogueado = signal<boolean>(false);
-  menuAbierto = false;
+  @Output() abrirMenu = new EventEmitter<void>();
 
-  constructor() {
-    this.usuarioLogueado.set(!!localStorage.getItem('usuario'));
-
-    window.addEventListener('storage', () => {
-      this.usuarioLogueado.set(!!localStorage.getItem('usuario'));
-    });
-  }
-
-  cambioEstadoMenu() {
-    this.menuAbierto = !this.menuAbierto;
-  }
-
-  cerrarMenu() {
-    this.menuAbierto = false;
-  }
+  constructor(private router: Router) {}
 
   cerrarSesion() {
     localStorage.removeItem('usuario');
-    this.usuarioLogueado.set(false);
-    this.cerrarMenu();
+    this.router.navigate(['/login']);
   }
 }

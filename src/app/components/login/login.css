@@ -3,6 +3,6 @@ a {
 }
 
 a:hover {
-  color: rgb(20, 150, 115);
+  color: #3CA18A;
   text-decoration: underline;
 }

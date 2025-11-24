@@ -1,0 +1,30 @@
+<div class="sidebar-overlay" [class.open]="abierto" (click)="cerrar.emit()"></div>
+<div class="sidebar" [class.open]="abierto">
+    <div class="sidebar-content" (click)="$event.stopPropagation()">
+        <ul class="list-unstyled">
+            <li>
+                <div class="item-menu" (click)="cambioMenu('citas')">Citas</div>
+                <div class="sub-item" [class.show]="submenuAbierto === 'citas'">
+                    <div><a routerLink="/inicio/nuevaCita" class="item" (click)="cerrar.emit()">Nueva</a></div>
+                    <div><a routerLink="/inicio/consultaCitas" class="item" (click)="cerrar.emit()">Consultar</a></div>
+                </div>
+            </li>
+
+            <li>
+                <div class="item-menu">
+                    <a routerLink="/inicio/calendario" (click)="cerrar.emit()">Calendario</a>
+                </div>
+            </li>
+            <li>
+                <div class="item-menu"> 
+                    <a routerLink="/inicio/configuracion" (click)="cerrar.emit()">Configuración</a>
+                </div>
+            </li>
+            <li>
+                <div class="item-menu">
+                    <a (click)="cerrarSesion()">Cerrar sesión</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>

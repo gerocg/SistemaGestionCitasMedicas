@@ -14,6 +14,7 @@ export class AuthGuard implements CanActivate {
     if (usuario) {
       try {
         JSON.parse(usuario); 
+        // this.router.navigate(['/inicio']);
         return true;
       } catch {
         localStorage.removeItem('usuario');

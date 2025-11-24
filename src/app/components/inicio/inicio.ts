@@ -1,25 +1,18 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Header } from '../header/header';
+import { Sidebar } from '../sidebar/sidebar';
+import { RouterOutlet } from '@angular/router';
+import { Calendario } from '../calendario/calendario';
 
 @Component({
   selector: 'app-inicio',
-  imports: [Header],
+  imports: [RouterOutlet, Header, Sidebar],
   templateUrl: './inicio.html',
   styleUrl: './inicio.css',
 })
 export class Inicio {
-  usuario: any = null;
+  sidebarAbierto = false; 
 
-  constructor(private router: Router) {
-    try {
-      const datos = localStorage.getItem('usuario');
-        if (datos) {
-          this.usuario = JSON.parse(datos);
-        }
-    } catch {
-      localStorage.removeItem('usuario');
-      this.router.navigate(['/login']);
-    }
-  }
+  constructor(private router: Router) {}
 }

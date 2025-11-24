@@ -1,0 +1,47 @@
+/*Calendario*/
+.fc .fc-toolbar.fc-header-toolbar {
+  padding: 10px;
+  border-radius: 6px;
+}
+
+.fc .fc-button {
+  background-color: white;
+  border: 2px solid var(--color-principal);
+  color: var(--color-principal);
+  transition: 0.2s ease-in-out;
+}
+
+.fc .fc-button:hover {
+  background-color: var(--color-hover);
+  color: white;
+}
+
+.fc .fc-button.fc-button-active {
+  background-color: var(--color-principal);
+  color: white;
+}
+
+.fc-event {
+  background-color: var(--color-principal);
+  border: none;
+  color: white;
+  transition: 0.2s;
+}
+
+.fc-event:hover {
+  background-color: var(--color-hover);
+}
+
+.fc-theme-standard th {
+  background-color: #328A76 !important;
+  color: white !important;
+}
+
+.fc-col-header-cell-cushion {
+  color: white !important;
+  text-decoration: none !important;
+}
+
+.fc-theme-standard th:hover {
+  background-color: #3CA18A !important;
+}
