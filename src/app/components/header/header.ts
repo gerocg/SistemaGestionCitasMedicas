@@ -14,7 +14,10 @@ export class Header {
   constructor(private router: Router) {}
 
   cerrarSesion() {
-    localStorage.removeItem('usuario');
-    this.router.navigate(['/login']);
+    localStorage.removeItem('token');
+    this.router.navigate(['/login'], {
+      state: { email: localStorage.getItem('lastEmail') }
+    });
   }
+
 }

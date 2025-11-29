@@ -17,9 +17,11 @@ export class Sidebar {
   cambioMenu(menu: string) {
     this.submenuAbierto = this.submenuAbierto === menu ? null : menu;
   }
-
+  
   cerrarSesion() {
-    localStorage.removeItem('usuario');
-    this.router.navigate(['/login']);
+    localStorage.removeItem('token');
+    this.router.navigate(['/login'], {
+      state: { email: localStorage.getItem('lastEmail') }
+    });
   }
 }

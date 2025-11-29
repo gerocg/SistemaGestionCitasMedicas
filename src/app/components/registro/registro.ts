@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { PacientesService } from '../../services/pacientes-services';
+import { ToastService } from '../../services/toast-service';
+import { SpinnerService } from '../../services/spinner-service';
 
 @Component({
   selector: 'app-registro',
@@ -12,7 +14,7 @@ import { PacientesService } from '../../services/pacientes-services';
   styleUrl: './registro.css',
 })
 export class Registro {
-  constructor(private router: Router, private pacientes_service: PacientesService) {}
+  constructor(private router: Router, private pacientes_service: PacientesService, private toast_service: ToastService, private spinner_service: SpinnerService) {}
 
   paso: number = 1;
   nombre: string = '';
@@ -26,10 +28,11 @@ export class Registro {
     const fechaISO = this.fechaNacimiento ? new Date(this.fechaNacimiento).toISOString() : '';
 
     if (this.contrasenia !== this.confirmarContrasenia) {
-      alert('Las contraseñas no coinciden.');
+      this.toast_service.show('Las contraseñas no coinciden', 'error');
       return;
     }
 
+    this.spinner_service.show();
     this.pacientes_service.Register(
       this.nombre,
       this.contrasenia,
@@ -38,16 +41,18 @@ export class Registro {
       this.telefono
     ).subscribe({
       next: (data) => {
+        this.spinner_service.hide();
         console.log('Registro exitoso:', data);
-        localStorage.setItem('usuario', JSON.stringify(data));
-        window.dispatchEvent(new Event('storage'));
-        this.router.navigate(['/inicio']);
+        this.toast_service.show('Registro exitoso!', 'success');
+        this.router.navigate(['/login'], {state: { email: this.email }});
       },
       error: (error) => {
+        this.spinner_service.hide();
         if (error.status === 409) {
-          alert('El nombre de usuario ya existe. Por favor, elija otro.');
+          this.toast_service.show('El usuario ya existe.', 'error');
         } else {
           console.error('Error en el registro:', error);
+          this.toast_service.show('Error en el registro', 'error');
         }
       }
     });

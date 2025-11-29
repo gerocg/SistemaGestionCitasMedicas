@@ -64,3 +64,34 @@ label {
 }
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.card-header {
+  background-color: var(--color-principal);
+  color: white;
+}
+
+.btn-principal {
+  background-color: var(--color-principal);
+  color: white;
+  border: none;
+  transition: background-color 0.2s ease;
+  display: inline-block;
+  font-weight: 400;
+  text-align: center;
+  vertical-align: middle;
+  user-select: none;
+  padding: .375rem .75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  border-radius: .375rem;
+}
+
+.btn-principal:hover {
+  background-color: var(--color-hover);
+  color: white;
+}
+
+.container {
+  width: 80%;
+  margin: auto;
+}

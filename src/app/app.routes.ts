@@ -1,17 +1,18 @@
 import { Routes } from '@angular/router'; 
 import { AuthGuard } from './guards/auth-guard'; 
+import { NoAuthGuard } from './guards/no-auth-guard';
 
 export const routes: Routes = [ 
     { path: '', redirectTo: 'login', pathMatch: 'full' }, 
 
     //Publicas 
-    { path: 'login', loadComponent: () => import('./components/login/login').then(m => m.Login) }, 
-    { path: 'registro', loadComponent: () => import('./components/registro/registro').then(m => m.Registro) }, 
-    { path: 'recuperarContrasenia', loadComponent: () => import('./components/recuperar-contrasenia/recuperar-contrasenia').then(m => m.RecuperarContrasenia) },
+{ path: 'login', loadComponent: () => import('./components/login/login').then(m => m.Login), canActivate: [NoAuthGuard]}, 
+    { path: 'registro', loadComponent: () => import('./components/registro/registro').then(m => m.Registro), canActivate: [NoAuthGuard] }, 
+    { path: 'recuperarContrasenia', loadComponent: () => import('./components/recuperar-contrasenia/recuperar-contrasenia').then(m => m.RecuperarContrasenia), canActivate: [NoAuthGuard] },
 
     //Privadas 
     { path: 'inicio', loadComponent: () => import('./components/inicio/inicio').then(m => m.Inicio), 
-    // canActivate: [AuthGuard], 
+    canActivate: [AuthGuard], 
     children: [ 
         { path: '', redirectTo: 'calendario', pathMatch: 'full' }, 
         { path: 'calendario', loadComponent: () => import('./components/calendario/calendario').then(m => m.Calendario) }, 

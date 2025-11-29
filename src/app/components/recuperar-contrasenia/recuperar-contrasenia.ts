@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { PacientesService } from '../../services/pacientes-services';
+import { ToastService } from '../../services/toast-service';
 
 @Component({
   selector: 'app-recuperar-contrasenia',
@@ -12,21 +13,21 @@ import { PacientesService } from '../../services/pacientes-services';
 export class RecuperarContrasenia {
   email: string = '';
   
-  constructor(private router: Router, private pacientes_service: PacientesService){}
+  constructor(private router: Router, private pacientes_service: PacientesService, private toast_service: ToastService){}
 
   recuperarContrasena() {
     if (!this.email.trim()) {
-      alert("Ingresá un e-mail válido");
+      this.toast_service.show('Ingresá un e-mail válido', 'error');
       return;
     }
 
     this.pacientes_service.EnviarRecuperacionEmail(this.email).subscribe({
       next: () => {
-        alert("Se envió un correo con instrucciones para recuperar la contraseña.");
+        this.toast_service.show('Correo enviado con éxito', 'success');
         this.router.navigate(['/login']);
       },
       error: () => {
-        alert("No se pudo enviar el correo. Verifique el e-mail.");
+        this.toast_service.show('No se pudo enviar el correo. Verifique el e-mail.', 'error');
       }
     });
   }

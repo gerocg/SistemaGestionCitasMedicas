@@ -1,1 +1,50 @@
-<p>nueva-cita works!</p>
+<div class="container mt-1">
+    <div class="card shadow-sm mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">Nueva Cita</h5>
+        </div>
+
+        <div class="card-body">
+            <div class="mb-3">
+                <label class="form-label">Paciente</label>
+                <input type="text" class="form-control" placeholder="Buscar paciente..." [(ngModel)]="pacienteBusqueda" (input)="filtrarPacientes()" (focus)="filtrarPacientes()" (keydown)="manejarTeclas($event)">
+
+                @if(pacientesFiltrados?.length > 0){
+                    <ul class="buscador-lista">
+                        @for(p of pacientesFiltrados; track p.Id; let i = $index){
+                            <li class="buscador-item" [class.active]="indexSeleccionado === i" (click)="seleccionarPaciente(p)">
+                                {{ p.nombre }} - {{ p.documento }}
+                            </li>
+                        }
+                    </ul>
+                }
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Fecha</label>
+                <input type="date" class="form-control" [(ngModel)]="fecha">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Hora</label>
+                <input type="time" class="form-control" [(ngModel)]="hora">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Tratamiento</label>
+                <textarea class="form-control" rows="3" [(ngModel)]="tratamiento"></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Observaciones (opcional)</label>
+                <textarea class="form-control" rows="2" [(ngModel)]="observaciones"></textarea>
+            </div>
+
+            <div style="text-align: center;">
+                <button class="btn-principal" (click)="guardarCita()">
+                    Guardar cita
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

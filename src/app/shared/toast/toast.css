@@ -1,0 +1,28 @@
+.toast {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.toast-correcto {
+  background-color: #4DB6AC;  
+}
+
+.toast-error {
+  background-color: #D64545; 
+}
+
+.toast-contenedor{
+  top: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+}
