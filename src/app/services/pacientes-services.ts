@@ -27,9 +27,15 @@ export class PacientesService {
         });
     }
 
-    EnviarRecuperacionEmail(email: string) {
-        return this.http.post<any>(this.urlBase + "/recuperarEmail", {
+    EnviarRecuperacionContrasenaEmail(email: string) {
+        return this.http.post<any>(this.urlBase + "/recuperarContrasena", {
             email: email
+        });
+    }
+
+    CambiarContrasenia(contrasenia: string) {
+        return this.http.post<any>(this.urlBase + "/cambiarContrasenia", {
+            nueva_contrasenia: contrasenia
         });
     }
 

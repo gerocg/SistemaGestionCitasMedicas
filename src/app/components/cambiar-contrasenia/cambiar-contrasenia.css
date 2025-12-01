@@ -1,0 +1,8 @@
+.layout-container {
+  margin-top: 60px;
+}
+
+.content-wrap {
+  flex-grow: 1;     
+  padding: 1rem;
+}

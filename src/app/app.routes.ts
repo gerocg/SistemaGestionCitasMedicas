@@ -9,15 +9,16 @@ export const routes: Routes = [
 { path: 'login', loadComponent: () => import('./components/login/login').then(m => m.Login), canActivate: [NoAuthGuard]}, 
     { path: 'registro', loadComponent: () => import('./components/registro/registro').then(m => m.Registro), canActivate: [NoAuthGuard] }, 
     { path: 'recuperarContrasenia', loadComponent: () => import('./components/recuperar-contrasenia/recuperar-contrasenia').then(m => m.RecuperarContrasenia), canActivate: [NoAuthGuard] },
-
+    
     //Privadas 
     { path: 'inicio', loadComponent: () => import('./components/inicio/inicio').then(m => m.Inicio), 
-    canActivate: [AuthGuard], 
-    children: [ 
-        { path: '', redirectTo: 'calendario', pathMatch: 'full' }, 
-        { path: 'calendario', loadComponent: () => import('./components/calendario/calendario').then(m => m.Calendario) }, 
-        { path: 'nuevaCita', loadComponent: () => import('./components/nueva-cita/nueva-cita').then(m => m.NuevaCita) }, 
-        { path: 'consultaCitas', loadComponent: () => import('./components/consulta-citas/consulta-citas').then(m => m.ConsultaCitas) } 
+        canActivate: [AuthGuard], 
+        children: [ 
+            { path: '', redirectTo: 'calendario', pathMatch: 'full' }, 
+            { path: 'calendario', loadComponent: () => import('./components/calendario/calendario').then(m => m.Calendario) }, 
+            { path: 'nuevaCita', loadComponent: () => import('./components/nueva-cita/nueva-cita').then(m => m.NuevaCita) }, 
+            { path: 'consultaCitas', loadComponent: () => import('./components/consulta-citas/consulta-citas').then(m => m.ConsultaCitas) },
+            { path: 'cambiarContrasenia', loadComponent: () => import('./components/cambiar-contrasenia/cambiar-contrasenia').then(m => m.CambiarContrasenia)},
     ]}, 
     { path: '**', redirectTo: 'login' } 
 ];

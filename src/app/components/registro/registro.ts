@@ -1,5 +1,4 @@
-import { Component, inject } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -9,7 +8,7 @@ import { SpinnerService } from '../../services/spinner-service';
 
 @Component({
   selector: 'app-registro',
-  imports: [RouterLink, FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule],
   templateUrl: './registro.html',
   styleUrl: './registro.css',
 })
@@ -24,7 +23,7 @@ export class Registro {
   contrasenia: string = '';
   confirmarContrasenia: string = '';
 
-  onRegister() {
+  registrarse() {
     const fechaISO = this.fechaNacimiento ? new Date(this.fechaNacimiento).toISOString() : '';
 
     if (this.contrasenia !== this.confirmarContrasenia) {

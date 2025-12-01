@@ -28,15 +28,16 @@ export class Login {
     }
   }
 
-  onLogin(){
+  login(){
     this.spinner_service.show();
     this.pacientes_service.Login(this.usuario, this.contrasenia).subscribe({
-      next: (data) => {
+      next: (data: any) => {
       this.spinner_service.hide();
       console.log('Login exitoso:', data);
       localStorage.setItem('token', data.token);
       localStorage.setItem('ultimo_usuario', this.usuario);
-      this.router.navigate(['/inicio']);
+      if(data.requiereCambioContrasenia) this.router.navigate(['/inicio/cambiarContrasenia']);
+      else this.router.navigate(['/inicio']);
       this.toast_service.show('Bienvenido!', 'success');
       this.usuario = '';
       this.contrasenia = '';
