@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class PacientesService {
     constructor() { }
@@ -25,6 +25,14 @@ export class PacientesService {
             fecha_nacimiento: fechaNacimiento,
             telefono: telefono
         });
+    }
+
+    ObtenerDatosPaciente(id: number) {
+        return this.http.get<any>(this.urlBase + "/" + id);
+    }
+
+    ActualizarPaciente(data: any) {
+        return this.http.put<any>(this.urlBase + "/update", data);
     }
 
     EnviarRecuperacionContrasenaEmail(email: string) {

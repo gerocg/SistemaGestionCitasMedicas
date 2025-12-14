@@ -1,0 +1,18 @@
+<div class="perfil-container">
+  <form [formGroup]="form" (ngSubmit)="guardar()">
+
+    <label>Nombre completo</label>
+    <input formControlName="nombre" type="text" />
+
+    <label>Email</label>
+    <input formControlName="email" type="email" />
+
+    <label>Fecha de nacimiento</label>
+    <input formControlName="fechaNacimiento" type="date" />
+
+    <label>Teléfono</label>
+    <input formControlName="telefono" type="text" />
+
+    <button type="submit">Guardar cambios</button>
+  </form>
+</div>
