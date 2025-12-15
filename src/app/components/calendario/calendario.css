@@ -45,3 +45,20 @@
 .fc-theme-standard th:hover {
   background-color: #3CA18A !important;
 }
+
+/*Estilos sistema*/
+.contenedor-calendario {
+  height: 100%;
+}
+
+full-calendar {
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 1000px) {
+  full-calendar {
+    height: 90%;
+    overflow-y: auto;
+  }
+}

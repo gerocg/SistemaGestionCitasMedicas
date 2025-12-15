@@ -1,0 +1,59 @@
+<div class="container mt-1">
+    <div class="card shadow-sm mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">Configuración del calendario</h5>
+        </div>
+
+        <div class="card-body">
+            <div class="mb-3">
+                <label class="form-label">Hora inicio</label>
+                <select class="form-select horas" [(ngModel)]="horaInicio">
+                    @for(h of horasLaborales; track h){
+                        <option [value]="h">
+                        {{ h }}
+                        </option>
+                    }
+                </select>            
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Hora fin</label>
+                <select class="form-select" [(ngModel)]="horaFin">
+                    @for(h of horasLaborales; track h){
+                        <option [value]="h">
+                        {{ h }}
+                        </option>
+                    }
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Intervalo visual del calendario</label>
+                <select placeholder="Seleccione intervalo" class="form-select" [(ngModel)]="intervaloBase">
+                    <option value="15">15 min</option>
+                    <option value="30">30 min</option>
+                    <option value="45">45 min</option>
+                    <option value="60">60 min</option>
+                    <option value="90">90 min</option>
+                </select> 
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Duración estándar de la cita</label>
+                <select placeholder="Seleccione duración" class="form-select" [(ngModel)]="duracionGenerica">
+                    <option value="15">15 min</option>
+                    <option value="30">30 min</option>
+                    <option value="45">45 min</option>
+                    <option value="60">60 min</option>
+                    <option value="90">90 min</option>
+                </select>            
+            </div>
+
+            <div style="text-align: center;">
+                <button class="btn-principal" (click)="guardarConfiguracion()">
+                    Guardar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

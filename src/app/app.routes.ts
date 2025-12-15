@@ -17,6 +17,8 @@ export const routes: Routes = [
             { path: '', redirectTo: 'calendario', pathMatch: 'full' }, 
             { path: 'calendario', loadComponent: () => import('./components/calendario/calendario').then(m => m.Calendario) }, 
             { path: 'nuevaCita', loadComponent: () => import('./components/nueva-cita/nueva-cita').then(m => m.NuevaCita) }, 
+            { path: 'calendarioConfiguracion', loadComponent: () => import('./components/calendario-configuracion/calendario-configuracion').then(m => m.CalendarioConfiguracion) }, 
+            { path: 'tiposConsulta', loadComponent: () => import('./components/tipos-consulta/tipos-consulta').then(m => m.TiposConsulta) }, 
             { path: 'consultaCitas', loadComponent: () => import('./components/consulta-citas/consulta-citas').then(m => m.ConsultaCitas) },
             { path: 'cambiarContrasenia', loadComponent: () => import('./components/cambiar-contrasenia/cambiar-contrasenia').then(m => m.CambiarContrasenia)},
     ]}, 

@@ -13,13 +13,13 @@ html, body {
   --color-hover: #3CA18A;
 }
 
-.form-control:focus {
+.form-control:focus, .form-select:focus {
   outline: none;               
   border-color: var(--color-principal);  
   box-shadow: 0 0 0 0.25rem rgba(26,177,139,0.25); 
 }
 
-.form-control:hover {
+.form-control:hover, .form-select:hover {
   border-color: var(--color-hover);
 }
 

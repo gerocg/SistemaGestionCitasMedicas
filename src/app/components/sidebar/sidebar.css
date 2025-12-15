@@ -18,7 +18,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 30vh;         
+  width: 40vh;         
   height: 100%;
   background: #328A76;
   color: white;
@@ -60,8 +60,8 @@
 }
 
 a {
-    color: inherit !important;
-    text-decoration: none !important;
-    display: block;
-    cursor: pointer;
+  color: inherit !important;
+  text-decoration: none !important;
+  display: block;
+  cursor: pointer;
 }
