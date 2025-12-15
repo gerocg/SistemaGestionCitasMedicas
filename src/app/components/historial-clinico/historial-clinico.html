@@ -1,0 +1,75 @@
+<h3>Citas pendientes</h3>
+
+@if (citasPendientes.length === 0) {
+  <div>
+    No hay citas pendientes
+  </div>
+}
+
+<ul>
+  @for (cita of citasPendientes; track cita.id_cita) {
+    <li>
+      <div>
+        <strong>{{ cita.fechaAgendado | date:'short' }}</strong>
+      </div>
+
+      <div>
+        {{ cita.comentario }}
+      </div>
+
+      @if (cita.archivos.length > 0) {
+        <div>
+          <strong>Archivos:</strong>
+          <ul>
+            @for (archivo of cita.archivos; track archivo.id_archivo) {
+              <li>
+                <a [href]="archivo.rutaArchivo" target="_blank">
+                  {{ archivo.nombreArchivo }}
+                </a>
+              </li>
+            }
+          </ul>
+        </div>
+      }
+    </li>
+  }
+</ul>
+
+<hr>
+
+<h3>Citas realizadas</h3>
+
+@if (citasRealizadas.length === 0) {
+  <div>
+    No hay citas realizadas
+  </div>
+}
+
+<ul>
+  @for (cita of citasRealizadas; track cita.id_cita) {
+    <li>
+      <div>
+        <strong>{{ cita.fechaAgendado | date:'short' }}</strong>
+      </div>
+
+      <div>
+        {{ cita.comentario }}
+      </div>
+
+      @if (cita.archivos.length > 0) {
+        <div>
+          <strong>Archivos:</strong>
+          <ul>
+            @for (archivo of cita.archivos; track archivo.id_archivo) {
+              <li>
+                <a [href]="archivo.rutaArchivo" target="_blank">
+                  {{ archivo.nombreArchivo }}
+                </a>
+              </li>
+            }
+          </ul>
+        </div>
+      }
+    </li>
+  }
+</ul>

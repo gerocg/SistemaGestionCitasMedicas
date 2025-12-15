@@ -31,6 +31,20 @@ export class PacientesService {
         return this.http.get<any>(this.urlBase + "/" + id);
     }
 
+    ObtenerPerfil() {
+        return this.http.get<any>(`${this.urlBase}/pacientes/me`);
+    }
+
+    ActualizarPerfil(payload: any) {
+        return this.http.put(`${this.urlBase}/pacientes/me`, payload);
+    }
+
+    getHistorialClinico() {
+        return this.http.get<any[]>(
+            `${this.urlBase}/pacientes/me/historial-clinico`
+        );
+    }
+
     ActualizarPaciente(data: any) {
         return this.http.put<any>(this.urlBase + "/update", data);
     }

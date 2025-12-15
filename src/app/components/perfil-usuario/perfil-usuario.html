@@ -13,6 +13,6 @@
     <label>Teléfono</label>
     <input formControlName="telefono" type="text" />
 
-    <button type="submit">Guardar cambios</button>
+    <button type="submit" [disabled]="form.invalid">Guardar cambios</button>
   </form>
 </div>

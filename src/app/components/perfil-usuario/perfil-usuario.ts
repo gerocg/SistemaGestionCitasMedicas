@@ -11,19 +11,18 @@ import { ReactiveFormsModule } from '@angular/forms';
   templateUrl: './perfil-usuario.html',
   styleUrl: './perfil-usuario.css',
 })
-export class PerfilUsuario implements OnInit  {
-  
-  form!: FormGroup;
-  idUsuario!: number; // lo obtenés según cómo manejen el login
+export class PerfilUsuario implements OnInit {
 
-   constructor(
+  form!: FormGroup;
+
+  constructor(
     private fb: FormBuilder,
     private pacientesService: PacientesService,
     private spinner: SpinnerService,
     private toast: ToastService
-  ) {}
+  ) { }
 
-   ngOnInit() {
+  ngOnInit() {
     this.form = this.fb.group({
       nombre: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -31,20 +30,18 @@ export class PerfilUsuario implements OnInit  {
       telefono: [''],
     });
 
-    this.idUsuario = 1; // ejemplo. Cambialo según cómo manejen session/localStorage
-
     this.cargarDatos();
   }
 
   cargarDatos() {
     this.spinner.show();
 
-    this.pacientesService.ObtenerDatosPaciente(this.idUsuario).subscribe({
+    this.pacientesService.ObtenerPerfil().subscribe({
       next: (data) => {
         this.form.patchValue({
           nombre: data.nombre_completo_paciente,
           email: data.email,
-          fechaNacimiento: data.fecha_nacimiento,
+          fechaNacimiento: data.fecha_nacimiento?.split('T')[0],
           telefono: data.telefono
         });
         this.spinner.hide();
@@ -62,16 +59,15 @@ export class PerfilUsuario implements OnInit  {
     }
 
     const payload = {
-      id: this.idUsuario,
-      nombre_completo_paciente: this.form.value.nombre,
+      nombreCompletoPaciente: this.form.value.nombre,
       email: this.form.value.email,
-      fecha_nacimiento: this.form.value.fechaNacimiento,
+      fechaNacimiento: this.form.value.fechaNacimiento,
       telefono: this.form.value.telefono
     };
 
     this.spinner.show();
 
-    this.pacientesService.ActualizarPaciente(payload).subscribe({
+    this.pacientesService.ActualizarPerfil(payload).subscribe({
       next: () => {
         this.toast.success("Datos actualizados");
         this.spinner.hide();
