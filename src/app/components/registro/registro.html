@@ -4,46 +4,60 @@
     <form (ngSubmit)="registrarse()">   
         @if (paso === 1) {
             <div class="mb-3">
-                <label class="form-label">Nombre</label>
-                <input [(ngModel)]="nombre" name="nombre" type="text" class="form-control" placeholder="Ingrese su nombre" required>
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Nombre</mat-label>
+                    <input matInput [(ngModel)]="nombre" name="nombre" required>
+                </mat-form-field>
             </div>
             <div class="mb-3">
-                <label class="form-label">E-mail</label>
-                <input [(ngModel)]="email" name="email" type="email" class="form-control" placeholder="Ingrese su e-mail" required>
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>E-mail</mat-label>
+                    <input matInput type="email" [(ngModel)]="email" name="email" required>
+                </mat-form-field>
             </div>
             <div>
-                <button type="button" class="btn-color w-100" (click)="siguiente()">Siguiente</button>
+                <button type="button" class="btn btn-color-principal w-100" (click)="siguiente()">Siguiente</button>
             </div>
         }
         @else if(paso === 2){
             <div class="mb-3">
-                <label class="form-label">Teléfono</label>
-                <input [(ngModel)]="telefono" name="telefono" type="text" class="form-control" placeholder="Ingrese su teléfono" required>
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Teléfono</mat-label>
+                    <input matInput [(ngModel)]="telefono" name="telefono" required>
+                </mat-form-field>
             </div>
             <div class="mb-3">
-                <label class="form-label">Fecha de nacimiento</label>
-                <input [(ngModel)]="fechaNacimiento" name="fechaNacimiento" type="date" class="form-control" required>
+                <mat-form-field appearance="outline" class="w-100 mb-3">
+                    <mat-label>Fecha de nacimiento</mat-label>
+                    <input matInput [matDatepicker]="picker" [(ngModel)]="fechaNacimiento" name="fechaNacimiento" required>
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
             </div>
             <div class="contenedor-btn">
                 <button type="button" class="btn btn-secondary" (click)="atras()">Atrás</button>
-                <button type="button" class="btn-color" (click)="siguiente()">Siguiente</button>
+                <button type="button" class="btn btn-color-principal" (click)="siguiente()">Siguiente</button>
             </div>
         } 
         @else {
             <div class="mb-3">
-            <label class="form-label">Ingrese su contraseña</label>
-            <input [(ngModel)]="contrasenia" name="contrasenia" type="password" class="form-control" placeholder="Contraseña" required>
+                <mat-form-field appearance="outline" class="w-100 mb-3">
+                    <mat-label>Ingrese su contraseña</mat-label>
+                    <input matInput type="password" [(ngModel)]="contrasenia" name="contrasenia" required>
+                </mat-form-field>
             </div>
             <div class="mb-3">
-                <label class="form-label">Confirmar contraseña</label>
-                <input [(ngModel)]="confirmarContrasenia" name="confirmarContrasenia" type="password" class="form-control" placeholder="Repetir contraseña" required>
+                 <mat-form-field appearance="outline" class="w-100 mb-3">
+                    <mat-label>Confirmar contraseña</mat-label>
+                    <input matInput type="password" [(ngModel)]="confirmarContrasenia" name="confirmarContrasenia" required>
+                </mat-form-field>
                 @if(confirmarContrasenia && contrasenia !== confirmarContrasenia) {
                     <p style="color: red;">Las contraseñas no coinciden</p>
                 }
             </div>
             <div class="contenedor-btn">
                 <button type="button" class="btn btn-secondary" (click)="atras()">Atrás</button>
-                <button type="submit" class="btn-color w-100">Registrarme</button>
+                <button type="submit" class="btn btn-color-principal w-100">Registrarme</button>
             </div>
         }
 

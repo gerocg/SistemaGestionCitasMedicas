@@ -3,9 +3,12 @@ import { ConfiguracionService } from '../../services/configuracion-service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatSelectModule} from '@angular/material/select';
+
 @Component({
   selector: 'app-calendario-configuracion',
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, MatFormFieldModule, MatSelectModule],
   templateUrl: './calendario-configuracion.html',
   styleUrl: './calendario-configuracion.css',
 })
@@ -37,20 +40,20 @@ export class CalendarioConfiguracion {
     });
   }
 
-    generarHorasLaborales() {
-      const horaInicio = 6;
-      const horaFin = 22;  
-      const intervalo = 30;  
+  generarHorasLaborales() {
+    const horaInicio = 6;
+    const horaFin = 22;  
+    const intervalo = 30;  
 
-      this.horasLaborales = [];
+    this.horasLaborales = [];
 
-      for (let minutos = horaInicio * 60; minutos <= horaFin * 60; minutos += intervalo) {
-        const h = Math.floor(minutos / 60);
-        const m = minutos % 60;
+    for (let minutos = horaInicio * 60; minutos <= horaFin * 60; minutos += intervalo) {
+      const h = Math.floor(minutos / 60);
+      const m = minutos % 60;
 
-        this.horasLaborales.push(
-          `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`
-        );
-      }
+      this.horasLaborales.push(
+        `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`
+      );
+    }
   }
 }

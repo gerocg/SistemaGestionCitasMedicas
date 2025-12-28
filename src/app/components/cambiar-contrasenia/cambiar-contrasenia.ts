@@ -5,6 +5,7 @@ import { ToastService } from '../../services/toast-service';
 import { SpinnerService } from '../../services/spinner-service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../services/auth-service';
 
 @Component({
   selector: 'app-cambiar-contrasenia',
@@ -17,7 +18,7 @@ export class CambiarContrasenia {
   contrasenia: string = '';
   confirmarContrasenia: string = '';
 
-  constructor(private router: Router, private pacientes_service: PacientesService, private toast_service: ToastService, private spinner_service: SpinnerService) {}
+  constructor(private router: Router, private auth_service: AuthService, private toast_service: ToastService, private spinner_service: SpinnerService) {}
   
   cambiarContrasenia() {
     if (!this.contrasenia || this.contrasenia !== this.confirmarContrasenia) {
@@ -26,7 +27,7 @@ export class CambiarContrasenia {
     }
 
     this.spinner_service.show();
-    this.pacientes_service.CambiarContrasenia(this.contrasenia).subscribe({
+    this.auth_service.CambiarContrasenia(this.contrasenia).subscribe({
       next: (data: any) => {
       this.spinner_service.hide();
       this.toast_service.show('Cambio de contraseña exitoso!', 'success');

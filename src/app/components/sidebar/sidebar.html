@@ -15,13 +15,15 @@
                 </div>
             </li>
 
-            <li>
-                <div class="item-menu" (click)="cambioMenu('configuracion')">Configuración</div>
-                <div class="sub-item" [class.show]="submenuAbierto === 'configuracion'">
-                    <div><a routerLink="/inicio/calendarioConfiguracion" class="item" (click)="cerrar.emit()">Calendario</a></div>
-                    <div><a routerLink="/inicio/tiposConsulta" class="item" (click)="cerrar.emit()">Tipos de consulta</a></div>
-                </div>
-            </li>
+            @if(esAdminProfesional()) {
+                <li>
+                    <div class="item-menu" (click)="cambioMenu('configuracion')">Configuración</div>
+                    <div class="sub-item" [class.show]="submenuAbierto === 'configuracion'">
+                        <div><a routerLink="/inicio/calendarioConfiguracion" class="item" (click)="cerrar.emit()">Calendario</a></div>
+                        <div><a routerLink="/inicio/tiposConsulta" class="item" (click)="cerrar.emit()">Tipos de consulta</a></div>
+                    </div>
+                </li>
+            }
             <li>
                 <div class="item-menu">
                     <a (click)="cerrarSesion()">Cerrar sesión</a>

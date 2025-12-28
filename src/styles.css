@@ -11,6 +11,8 @@ html, body {
 :root {
   --color-principal: #328A76;
   --color-hover: #3CA18A;
+  --color-error: #dc3545;
+  --color-error-hover: #e4606c;
 }
 
 .form-control:focus, .form-select:focus {
@@ -38,40 +40,7 @@ label {
   transition: background-color 0.2s ease;
 }
 
-.btn-color {
-  display: inline-block;
-  width: 100%;
-  padding: 0.375rem 0.75rem;
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: 1.5;
-  text-align: center;
-  text-decoration: none;
-  vertical-align: middle;
-  cursor: pointer;
-  user-select: none;
-  color: white;
-  background-color: var(--color-principal); 
-  border: none;
-  border-radius: 0.375rem;
-  box-shadow: none;
-  outline: none;
-  transition: background-color 0.2s ease;
-}
-
-.btn-color:hover {
-  background-color: var(--color-hover); 
-}
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
-
-.card-header {
-  background-color: var(--color-principal);
-  color: white;
-}
-
-.btn-principal {
-  background-color: var(--color-principal);
+.btn {
   color: white;
   border: none;
   transition: background-color 0.2s ease;
@@ -86,12 +55,46 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   border-radius: .375rem;
 }
 
-.btn-principal:hover {
-  background-color: var(--color-hover);
+.btn-color-principal {
+  background-color: var(--color-principal); 
+}
+.btn-color-principal:hover {
+  color: white;
+  background-color: var(--color-hover); 
+}
+
+.btn-color-error {
+  background-color: var(--color-error); 
+}
+
+.btn-color-error:hover {
+  color: white;
+  background-color: var(--color-error-hover);
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.card-header {
+  background-color: var(--color-principal);
   color: white;
 }
 
 .container {
   width: 80%;
   margin: auto;
+}
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* Color del borde cuando tiene foco */
+.mat-mdc-form-field.mat-focused .mdc-notched-outline__leading,
+.mat-mdc-form-field.mat-focused .mdc-notched-outline__notch,
+.mat-mdc-form-field.mat-focused .mdc-notched-outline__trailing {
+  border-color: var(--color-principal) !important;
+}
+
+/* Color del label cuando tiene foco */
+.mat-mdc-form-field.mat-focused .mat-mdc-floating-label {
+  color: var(--color-principal) !important;
 }

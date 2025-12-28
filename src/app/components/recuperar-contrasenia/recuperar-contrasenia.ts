@@ -4,6 +4,7 @@ import { Router, RouterLink } from '@angular/router';
 import { PacientesService } from '../../services/pacientes-services';
 import { ToastService } from '../../services/toast-service';
 import { SpinnerService } from '../../services/spinner-service';
+import { AuthService } from '../../services/auth-service';
 
 @Component({
   selector: 'app-recuperar-contrasenia',
@@ -14,7 +15,7 @@ import { SpinnerService } from '../../services/spinner-service';
 export class RecuperarContrasenia {
   email: string = '';
   
-  constructor(private router: Router, private pacientes_service: PacientesService, private toast_service: ToastService, private spinner_service: SpinnerService){
+  constructor(private router: Router, private auth_service: AuthService, private toast_service: ToastService, private spinner_service: SpinnerService){
     this.email = localStorage.getItem('ultimo_usuario') || '';
   }
 
@@ -24,7 +25,7 @@ export class RecuperarContrasenia {
       return;
     }
     this.spinner_service.show();
-    this.pacientes_service.EnviarRecuperacionContrasenaEmail(this.email).subscribe({
+    this.auth_service.EnviarRecuperacionContrasenaEmail(this.email).subscribe({
       next: () => {
         this.spinner_service.hide();
         this.toast_service.show('Correo enviado con éxito', 'success');

@@ -1,49 +1,74 @@
 <div class="container mt-1">
     <div class="card shadow-sm mb-4">
         <div class="card-header">
-            <h5 class="mb-0">Nueva Cita</h5>
+            {{ modoEdicion ? 'Editar Cita' : 'Nueva Cita' }}
         </div>
 
         <div class="card-body">
-            <div class="mb-3">
-                <label class="form-label">Paciente</label>
-                <input type="text" class="form-control" placeholder="Buscar paciente..." [(ngModel)]="pacienteBusqueda" (input)="filtrarPacientes()" (focus)="filtrarPacientes()" (keydown)="manejarTeclas($event)">
+            @if(puedeElegirPaciente()) {
+                <div class="mb-3">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Paciente</mat-label>
+                        <input matInput [matAutocomplete]="auto" placeholder="Buscar paciente..." [(ngModel)]="pacienteBusqueda" (input)="filtrarPacientes()" (focus)="filtrarPacientes()"/>
+                        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="seleccionarPaciente($event.option.value)">
+                            @for (p of pacientesFiltrados; track p) {
+                                <mat-option [value]="p">
+                                {{ p.nombreCompleto }}
+                                </mat-option>
+                            }
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </div>
+            }
 
-                @if(pacientesFiltrados?.length > 0){
-                    <ul class="buscador-lista">
-                        @for(p of pacientesFiltrados; track p.Id; let i = $index){
-                            <li class="buscador-item" [class.active]="indexSeleccionado === i" (click)="seleccionarPaciente(p)">
-                                {{ p.nombre }} - {{ p.documento }}
-                            </li>
-                        }
-                    </ul>
-                }
+            <div class="mb-3">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Fecha</mat-label>
+                    <input matInput [matDatepicker]="picker" [(ngModel)]="fecha">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Fecha</label>
-                <input type="date" class="form-control" [(ngModel)]="fecha">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Hora</mat-label>
+                    <mat-select [(ngModel)]="hora">
+                    @for (h of horasDisponibles; track h) {
+                        <mat-option [value]="h">{{ h }}</mat-option>
+                    }
+                    </mat-select>
+                </mat-form-field>
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Hora</label>
-                <input type="time" class="form-control" [(ngModel)]="hora">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Tratamiento</mat-label>
+                    <textarea matInput rows="3" [(ngModel)]="tratamiento" style="resize: none;"></textarea>
+                </mat-form-field>
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Tratamiento</label>
-                <textarea class="form-control" rows="3" [(ngModel)]="tratamiento"></textarea>
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Observaciones (opcional)</mat-label>
+                    <textarea matInput rows="2" [(ngModel)]="observaciones" style="resize: none;"></textarea>
+                </mat-form-field>
             </div>
 
-            <div class="mb-3">
-                <label class="form-label">Observaciones (opcional)</label>
-                <textarea class="form-control" rows="2" [(ngModel)]="observaciones"></textarea>
-            </div>
+            <div class="text-center mt-3">
+                @if(!modoEdicion){
+                    <button class="btn btn-color-principal" (click)="guardarCita()">
+                        Agendar cita
+                    </button>
+                } @else {
+                    <button class="btn btn-color-principal" (click)="actualizarCita()">
+                        Guardar cambios
+                    </button>
 
-            <div style="text-align: center;">
-                <button class="btn-principal" (click)="guardarCita()">
-                    Guardar cita
-                </button>
+                    <button class="btn btn-color-error ms-2" (click)="eliminarCita()">
+                        Eliminar
+                    </button>
+                }       
             </div>
         </div>
     </div>

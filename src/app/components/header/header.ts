@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, Output, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth-service';
 
 @Component({
   selector: 'app-header',
@@ -11,13 +11,10 @@ import { Router } from '@angular/router';
 export class Header {
   @Output() abrirMenu = new EventEmitter<void>();
 
-  constructor(private router: Router) {}
+  constructor(private auth_service: AuthService) {}
 
   cerrarSesion() {
-    localStorage.removeItem('token');
-    this.router.navigate(['/login'], {
-      state: { email: localStorage.getItem('lastEmail') }
-    });
+    this.auth_service.logout();
   }
 
 }

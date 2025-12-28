@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
+import { AuthService } from '../../services/auth-service';
 
 @Component({
   selector: 'app-sidebar',
@@ -12,16 +13,17 @@ export class Sidebar {
   @Output() cerrar = new EventEmitter<void>(); 
   submenuAbierto: string | null = null;
 
-  constructor(private router: Router) {}
+  constructor(private auth_service: AuthService) {}
 
   cambioMenu(menu: string) {
     this.submenuAbierto = this.submenuAbierto === menu ? null : menu;
   }
   
   cerrarSesion() {
-    localStorage.removeItem('token');
-    this.router.navigate(['/login'], {
-      state: { email: localStorage.getItem('lastEmail') }
-    });
+    this.auth_service.logout();
+  }
+
+  esAdminProfesional(): boolean {
+    return this.auth_service.esAdmin() || this.auth_service.esProfesional();
   }
 }
