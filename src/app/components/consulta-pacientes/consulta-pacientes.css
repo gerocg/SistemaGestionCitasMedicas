@@ -17,12 +17,3 @@
 .icon-error:hover mat-icon {
   color: var(--color-error-hover);
 }
-
-.estado-badge {
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 12px;
-  color: white;
-  max-height: 25px;
-  cursor: pointer;
-}

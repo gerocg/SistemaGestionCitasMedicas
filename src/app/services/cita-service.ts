@@ -14,7 +14,7 @@ export class CitaService {
     private refrescarCalendario = new Subject<void>();
     refrescarCalendarioObs = this.refrescarCalendario.asObservable();
 
-    NuevaCita(pacienteId: number, fechaHora: string, duracion: number, tratamiento: string, observaciones: string) {
+    nuevaCita(pacienteId: number, fechaHora: string, duracion: number, tratamiento: string, observaciones: string) {
         return this.http.post<any>(this.urlBase + "/nuevaCita", {
             pacienteId: pacienteId,
             fechaHora: fechaHora,
@@ -44,5 +44,26 @@ export class CitaService {
 
     eliminarCita(id: number) {
         return this.http.delete(this.urlBase + '/' + id);
+    }
+
+    filtrarCitas(pacienteId?: number, desde?: string, hasta?: string, estado?: string) {
+        let params: any = {};
+        if (pacienteId != null) params.pacienteId = pacienteId;
+        if (desde) params.desde = desde;
+        if (hasta) params.hasta = hasta;
+        if (estado) params.estado = estado;
+        return this.http.get<any[]>(`${this.urlBase}/filtrar`, { params });
+    }
+
+    subirArchivoCita(citaId: number, formData: FormData) {
+        return this.http.post(`${this.urlBase}/${citaId}/archivo`, formData);
+    }
+
+    eliminarArchivo(archivoId: number) {
+        return this.http.delete(`${this.urlBase}/archivo/${archivoId}`);
+    }
+
+    cambiarEstado(citaId: number, estado: string) {
+       return this.http.put(`${this.urlBase}/${citaId}/estado`, { estado });
     }
 }

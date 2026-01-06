@@ -1,0 +1,80 @@
+.btn-filtro {
+  margin: auto;
+}
+
+.historial-container {
+  padding: 10px;
+}
+
+.cita-card {
+  border-left: 5px solid #ccc;
+  background: #f9f9f9;
+  padding: 10px;
+}
+
+.cita-card.realizada {
+  border-color: #2e8b57;
+}
+
+.cita-card.confirmada {
+  border-color: #f0ad4e;
+}
+
+.cita-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.fecha {
+  font-weight: 600;
+  color: #333;
+}
+
+.estado-badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  color: white;
+  max-height: 25px;
+}
+
+.estado-badge.realizada {
+  background-color: var(--color-principal);
+}
+
+.estado-badge.confirmada {
+  background-color: #f0ad4e;
+}
+
+.cita-body label {
+  font-size: 12px;
+  color: #777;
+  text-transform: uppercase;
+}
+
+.cita-body p {
+  margin: 0 0 8px;
+  color: #222;
+}
+
+.cita-archivos {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 10px;
+}
+
+.cita-archivos ul {
+  padding-left: 15px;
+  margin: 0;
+}
+
+.cita-archivos li {
+  font-size: 14px;
+}
+
+.btn-eliminar {
+    font-size: 12px;
+    padding: 4px 6px;
+}

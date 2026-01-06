@@ -1,35 +1,33 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { ConfiguracionAgenda } from '../components/interfaces/configuracion-agenda.interface';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment.development';
+import { map } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
 })
 export class ConfiguracionService {
-    
-    private config: ConfiguracionAgenda = {
-        horaInicio: '08:00',
-        horaFin: '18:00',
-        intervaloBase: 30,
-        duracionGenerica: 30
-    };
-    
-    constructor() {
-        this.cargarDesdeStorage();
+    private http = inject(HttpClient);
+    private urlBase = environment.apiURL + 'api/ConfiguracionCalendario';
+
+    getConfiguracion() {
+    return this.http.get<any>(this.urlBase).pipe(map(resp => ({
+        horaInicio: resp.horaInicio.substring(0,5),
+        horaFin: resp.horaFin.substring(0,5),
+        intervaloBase: resp.intervaloBase,
+        duracionGenerica: resp.duracionCita
+      })));
     }
 
-    private cargarDesdeStorage() {
-        const data = localStorage.getItem('configAgenda');
-        if (data) {
-        this.config = JSON.parse(data) as ConfiguracionAgenda;
-        }
-    }
+    guardarConfiguracion(config: ConfiguracionAgenda) {
+        const body = {
+        horaInicio: config.horaInicio,
+        horaFin: config.horaFin,
+        intervaloBase: config.intervaloBase,
+        duracionCita: config.duracionGenerica
+        };
 
-    getConfiguracion(): ConfiguracionAgenda {
-        return this.config;
-    }
-
-    setConfiguracion(config: ConfiguracionAgenda) {
-        this.config = config;
-        localStorage.setItem('configAgenda', JSON.stringify(config));
+        return this.http.put(this.urlBase, body);
     }
 }

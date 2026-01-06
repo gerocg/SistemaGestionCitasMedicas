@@ -17,6 +17,7 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { CitaService } from '../../services/cita-service';
 import { AuthService } from '../../services/auth-service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ConfirmacionService } from '../../services/confirmar-service';
 
 @Component({
   selector: 'app-nueva-cita',
@@ -25,10 +26,8 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrl: './nueva-cita.css',
 })
 export class NuevaCita implements OnInit {
-  pacienteBusqueda = "";
   pacientesFiltrados: any = [];
   pacienteSeleccionado: any = null;
-  indexSeleccionado = -1;
   fecha: Date | null = null;
   hora: string = "";
   tratamiento: string = "";
@@ -38,41 +37,39 @@ export class NuevaCita implements OnInit {
   pacientes: any = [];
   citaId: number | null = null;
   modoEdicion = false;
+  modoVista: boolean = false;
+
+
 
   constructor(private configuracion_service: ConfiguracionService, private spinner_service: SpinnerService, 
     private cita_service: CitaService, private toast_service: ToastService, private auth_service: AuthService, 
-    private pacientes_service: PacientesService, private activated_route: ActivatedRoute, private router: Router) {}
+    private pacientes_service: PacientesService, private activated_route: ActivatedRoute, private router: Router,
+    private confirmacion_service: ConfirmacionService) {}
  
   ngOnInit(): void {
-    this.configuracion = this.configuracion_service.getConfiguracion();
-    this.generarHorasDisponibles();
-    this.cargarPacientes();
-
-    this.activated_route.paramMap.subscribe(params => {
-      const id = params.get('id');
-      if (id) {
-        this.modoEdicion = true;
-        this.citaId = +id;
-        this.cargarCita(this.citaId);
+    this.configuracion_service.getConfiguracion().subscribe({
+      next: (config) => {
+        this.configuracion = config;
+        this.generarHorasDisponibles();
+      }, error: (error) => {
+        this.toast_service.show('Error al cargar configuracion.', 'error');
+        console.error('Error al cargar la configuración:', error);
       }
     });
+
+    this.activated_route.queryParams.subscribe(params => {
+      const mode = params['mode'];
+      this.modoVista = mode === 'ver';
+    });
+
+    const id = this.activated_route.snapshot.paramMap.get('id');
+    if (id) {
+      this.citaId = +id;
+      this.modoEdicion = true;
+      this.cargarCita(this.citaId);
+    }
   }
   
-  cargarPacientes() {
-    this.spinner_service.show();
-    this.pacientes_service.GetPacientes().subscribe({
-      next: (data: any) => {
-        console.log('Pacientes cargados:', data);
-        this.spinner_service.hide();  
-        this.pacientes = data;
-      },
-      error: (error: any) => {
-        this.spinner_service.hide();
-        console.error('Error al cargar pacientes:', error);
-      }
-    });
-  }
-
   cargarCita(id: number) {
     this.spinner_service.show();
     this.cita_service.getCita(id).subscribe({
@@ -80,14 +77,13 @@ export class NuevaCita implements OnInit {
         console.log('Cita cargada:', data);
         this.fecha = new Date(data.fechaHora);
         this.hora = this.formatearHora(this.fecha);
-        console.log('Hora formateada:', this.hora);
         this.tratamiento = data.tratamiento;
         this.observaciones = data.observaciones;
         this.pacienteSeleccionado = {
           id: data.pacienteId,
           nombreCompleto: data.paciente?.usuario?.nombreCompleto
         };
-        this.pacienteBusqueda = this.pacienteSeleccionado.nombreCompleto;
+        this.pacientesFiltrados = [this.pacienteSeleccionado];
         this.spinner_service.hide();
       },
       error: (error: any) => {
@@ -126,29 +122,6 @@ export class NuevaCita implements OnInit {
     return `${h}:${m}`;
   }
 
-  filtrarPacientes() {
-    let texto = this.normalizar(this.pacienteBusqueda || '');
-
-    if (!texto) {
-      this.pacientesFiltrados = [];
-      this.pacienteSeleccionado = null;
-      return;
-    }
-
-    this.pacienteSeleccionado = null;
-
-    this.pacientesFiltrados = this.pacientes.filter((p: any) => {
-      let nombre = this.normalizar(p.nombreCompleto);
-      return nombre.includes(texto);
-    });
-  }
-
-  seleccionarPaciente(p: any) {
-    this.pacienteSeleccionado = p;
-    this.pacienteBusqueda = p.nombreCompleto;
-    this.pacientesFiltrados = [];
-  }
-
   guardarCita() {
     if (!this.fecha || !this.hora) {
       this.toast_service.show('Debe completar los campos obligatorios.', 'error');
@@ -163,7 +136,7 @@ export class NuevaCita implements OnInit {
     this.spinner_service.show();
     let pacienteId = this.puedeElegirPaciente() ? this.pacienteSeleccionado?.id ?? null : null;
     let fechaHoraISO = this.construirFechaHoraISO(this.fecha, this.hora);
-    this.cita_service.NuevaCita(pacienteId, fechaHoraISO, this.configuracion.duracionGenerica, this.tratamiento, this.observaciones).subscribe({  
+    this.cita_service.nuevaCita(pacienteId, fechaHoraISO, this.configuracion.duracionGenerica, this.tratamiento, this.observaciones).subscribe({  
       next: (data: any) => {
         this.spinner_service.hide();
         console.log('Cita creada:', data);
@@ -220,39 +193,27 @@ export class NuevaCita implements OnInit {
   }
 
   eliminarCita() {
-    if (!this.citaId) return;
-
-    if (!confirm('¿Seguro que desea cancelar esta cita?')) return;
-    this.spinner_service.show();
-
-    this.cita_service.eliminarCita(this.citaId).subscribe({
-      next: () => {
-        this.spinner_service.hide();
-        this.toast_service.show('Cita cancelada', 'success');
-        this.cita_service.notificarRefrescarCalendario();
-        this.router.navigate(['/inicio/calendario']);
-      },
-      error: (error) => {
-        console.error(error);
-        this.spinner_service.hide();
-        this.toast_service.show('Error al cancelar la cita', 'error');
-      }
-    });
-  }
-
-
-
-  normalizar(texto: string) {
-    return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-  }
-
-  scrollAItemActivo() {
-    setTimeout(() => {
-      const items = document.querySelectorAll('.buscador-item');
-      const itemActivo = items[this.indexSeleccionado] as HTMLElement;
-      if (itemActivo) {
-        itemActivo.scrollIntoView({ block: 'nearest' });
-      }
+    this.confirmacion_service.confirmar({
+      titulo: 'Eliminar archivo',
+      mensaje: '¿Seguro que desea eliminar este archivo?',
+      textoConfirmar: 'Si',
+      textoCancelar: 'No'
+    }).subscribe(confirmado => {
+      if (!confirmado || !this.citaId) return;
+      this.spinner_service.show();
+      this.cita_service.eliminarCita(this.citaId).subscribe({
+        next: () => {
+          this.spinner_service.hide();
+          this.toast_service.show('Cita cancelada', 'success');
+          this.cita_service.notificarRefrescarCalendario();
+          this.router.navigate(['/inicio/calendario']);
+        },
+        error: (error) => {
+          console.error(error);
+          this.spinner_service.hide();
+          this.toast_service.show('Error al cancelar la cita', 'error');
+        }
+      });
     });
   }
 
@@ -262,7 +223,6 @@ export class NuevaCita implements OnInit {
 
   limpiarFormulario() {
     this.pacienteSeleccionado = null;
-    this.pacienteBusqueda = '';
     this.fecha = null;
     this.hora = '';
     this.tratamiento = '';
@@ -287,5 +247,34 @@ export class NuevaCita implements OnInit {
   formatearHora(fecha: string | Date): string {
     const d = new Date(fecha);
     return `${d.getHours().toString().padStart(2,'0')}:${d.getMinutes().toString().padStart(2,'0')}`;
+  }
+
+  buscarPacientes(texto: string) {
+    if (!texto || texto.length < 3) {
+      this.pacientesFiltrados = [];
+      return;
+    }
+
+    this.pacientes_service.buscarPacientes(texto).subscribe(p => this.pacientesFiltrados = p);
+  }
+
+  mostrarPaciente(paciente: any): string {
+    return paciente ? paciente.nombreCompleto : '';
+  }
+
+  seleccionarPaciente(p: any) {
+    this.pacienteSeleccionado = p;
+    this.pacientesFiltrados = [];
+  }
+
+  pacienteCambio(valor: any) {
+    if (typeof valor === 'string') {
+      if (!valor) {
+        this.pacienteSeleccionado = null;
+        this.pacientesFiltrados = [];
+        return;
+      }
+      this.buscarPacientes(valor);
+    }
   }
 }

@@ -38,15 +38,15 @@ export class Registro {
       }
   
       this.spinner_service.show();
-      this.auth_service.Register(this.nombre, this.contrasenia, this.email, fechaISO, this.telefono
+      this.auth_service.register(this.nombre, this.contrasenia, this.email, fechaISO, this.telefono
       ).subscribe({
-        next: (data) => {
+        next: (data: any) => {
           this.spinner_service.hide();
           console.log('Registro exitoso:', data);
           this.toast_service.show('Registro exitoso!', 'success');
           this.router.navigate(['/login'], {state: { email: this.email }});
         },
-        error: (error) => {
+        error: (error: any) => {
           this.spinner_service.hide();
           if (error.status === 409) {
             this.toast_service.show('El usuario ya existe.', 'error');

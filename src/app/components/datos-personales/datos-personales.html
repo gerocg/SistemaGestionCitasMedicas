@@ -1,0 +1,60 @@
+<div class="container mt-1">
+  <div class="card shadow-sm mb-4">
+    <div class="card-header">
+      Datos personales
+    </div>
+
+    <div class="card-body">
+      <h6 class="mb-3 text-muted">Datos de la cuenta</h6>
+
+      <div class="mb-3">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Nombre completo</mat-label>
+          <input matInput [(ngModel)]="usuario.nombreCompleto">
+        </mat-form-field>
+      </div>
+
+      <div class="mb-3">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Email</mat-label>
+          <input matInput type="email" [(ngModel)]="usuario.email">
+        </mat-form-field>
+      </div>
+
+      @if(esPaciente){
+        <hr class="my-4">
+        <h6 class="mb-3 text-muted">Datos personales</h6>
+
+        <div class="mb-3">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Fecha de nacimiento</mat-label>
+            <input matInput [matDatepicker]="picker" [(ngModel)]="paciente.fechaNacimiento">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <div class="mb-3">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Teléfono</mat-label>
+            <input matInput [(ngModel)]="paciente.telefono">
+          </mat-form-field>
+        </div>
+
+        <div class="mb-3">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Dirección</mat-label>
+            <input matInput [(ngModel)]="paciente.direccion">
+          </mat-form-field>
+        </div>
+      }
+
+      <div class="text-center mt-4">
+        <button class="btn btn-color-principal" (click)="guardar()">
+          Guardar cambios
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>

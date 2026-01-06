@@ -25,7 +25,7 @@ export class RecuperarContrasenia {
       return;
     }
     this.spinner_service.show();
-    this.auth_service.EnviarRecuperacionContrasenaEmail(this.email).subscribe({
+    this.auth_service.enviarRecuperacionContrasenaEmail(this.email).subscribe({
       next: () => {
         this.spinner_service.hide();
         this.toast_service.show('Correo enviado con éxito', 'success');

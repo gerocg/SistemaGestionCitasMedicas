@@ -7,3 +7,9 @@
   justify-content: center;
   z-index: 9998;
 }
+
+@media (max-width: 1000px) {
+  main {
+    height: 100%;
+  }
+}

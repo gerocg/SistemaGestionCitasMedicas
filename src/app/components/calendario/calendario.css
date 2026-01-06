@@ -1,7 +1,11 @@
-/*Calendario*/
+/* Calendario */
 .fc .fc-toolbar.fc-header-toolbar {
   padding: 10px;
   border-radius: 6px;
+}
+
+.fc .fc-toolbar.fc-header-toolbar {
+  margin-bottom: 1em;
 }
 
 .fc .fc-button {
@@ -22,14 +26,27 @@
 }
 
 .fc-event {
-  background-color: var(--color-principal);
   border: none;
   color: white;
   transition: 0.2s;
 }
 
-.fc-event:hover {
-  background-color: var(--color-hover);
+.fc-event.cita-confirmada {
+  background-color: var(--color-principal);
+  border-left: 6px solid #1abc9c;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
+}
+
+.fc-event.cita-realizada {
+  background-color: rgba(50, 138, 118, 0.35);
+  border-left: 6px solid rgba(50, 138, 118, 0.5);
+  color: #2d3436;
+  box-shadow: none;
+  font-weight: 500;
+}
+
+.fc-event.cita-realizada:hover {
+  background-color: rgba(50, 138, 118, 0.35);
 }
 
 .fc-theme-standard th {
@@ -56,9 +73,25 @@ full-calendar {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+.fc-bg-event {
+  opacity: 0.35;
+}
+
+.fc-bg-event::after {
+  content: 'Bloqueado';
+  font-size: 11px;
+  padding-left: 4px;
+  color: #b71c1c;
+}
+
+
 @media (max-width: 1000px) {
   full-calendar {
-    height: 90%;
     overflow-y: auto;
+  }
+
+  .fc .fc-toolbar-title {
+    font-size: 1em;
+    margin: 0px;
   }
 }

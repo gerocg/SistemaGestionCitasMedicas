@@ -13,14 +13,14 @@ export class AuthService {
 
     roles: string[] = [];
 
-    Login(usuario: string, contrasenia: string) {
+    login(usuario: string, contrasenia: string) {
         return this.http.post<any>(this.urlBase + "/login", {
             email: usuario,
             contrasenia: contrasenia
         });
     }
 
-    Register(nombre: string, contrasenia: string, email: string, fechaNacimiento: string, telefono: string) {
+    register(nombre: string, contrasenia: string, email: string, fechaNacimiento: string, telefono: string) {
         return this.http.post<any>(this.urlBase + "/register", {
             nombreCompleto: nombre,
             email: email,
@@ -30,13 +30,13 @@ export class AuthService {
         });
     }
 
-    EnviarRecuperacionContrasenaEmail(email: string) {
+    enviarRecuperacionContrasenaEmail(email: string) {
         return this.http.post<any>(this.urlBase + "/recuperarContrasena", {
             email: email
         });
     }
 
-    CambiarContrasenia(contrasenia: string) {
+    cambiarContrasenia(contrasenia: string) {
         return this.http.post<any>(this.urlBase + "/cambiarContrasenia", {
             nuevaContrasenia: contrasenia
         });

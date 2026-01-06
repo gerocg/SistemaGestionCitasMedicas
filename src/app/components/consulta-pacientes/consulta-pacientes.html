@@ -1,0 +1,84 @@
+<div class="container mt-1">
+    <div class="card shadow-sm mb-4">
+        <div class="card-header">
+            Consultar Pacientes
+        </div>
+
+       <div class="row g-2 p-3 align-items-end">
+             <div class="col-12 col-md-10">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Buscar paciente</mat-label>
+                    <input matInput placeholder="Nombre, email o teléfono" [(ngModel)]="textoBusqueda"/>
+                </mat-form-field>
+            </div>
+
+            <div class="btn-filtro col-md-2">
+                <button class="btn btn-color-principal w-100" (click)="consultarPacientes()">Consultar</button>
+            </div>
+        </div>
+    </div>
+
+    @if(pacientes.length > 0) {
+        <div class="card shadow-sm mb-4">
+            <div class="card-header">
+                Pacientes   
+            </div>    
+            <div class="table-responsive">
+                <table mat-table [dataSource]="pacientes" class="mat-elevation-z1 w-100">
+    
+                <ng-container matColumnDef="nombre">
+                    <th mat-header-cell *matHeaderCellDef> Nombre </th>
+                    <td mat-cell *matCellDef="let p">
+                    {{ p.nombreCompleto }}
+                    </td>
+                </ng-container>
+        
+                <ng-container matColumnDef="email">
+                    <th mat-header-cell *matHeaderCellDef> Email </th>
+                    <td mat-cell *matCellDef="let p">
+                    {{ p.email }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="telefono">
+                    <th mat-header-cell *matHeaderCellDef> Teléfono </th>
+                    <td mat-cell *matCellDef="let p">
+                    {{ p.telefono }}
+                    </td>
+                </ng-container>
+        
+                <ng-container matColumnDef="fechaNacimiento">
+                    <th mat-header-cell *matHeaderCellDef> Fecha de Nacimiento </th>
+                    <td mat-cell *matCellDef="let p">
+                    {{ p.fechaNacimiento | date:'dd/MM/yyyy' }}
+                    </td>
+                </ng-container>
+        
+                <ng-container matColumnDef="acciones">
+                    <th mat-header-cell *matHeaderCellDef class="text-center"> Acciones </th>
+                    <td mat-cell *matCellDef="let p" class="text-center">
+                        <button mat-icon-button class="icon-primary" title="Editar" (click)="navegarEditarPaciente(p.id)">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+
+                        <button mat-icon-button class="icon-primary" title="Ver" (click)="navegarVerPaciente(p.id)">
+                            <mat-icon>visibility</mat-icon>
+                        </button>
+                    </td>
+                </ng-container>
+        
+                <tr mat-header-row *matHeaderRowDef="['nombre','email','telefono', 'fechaNacimiento','acciones']"></tr>
+                <tr mat-row *matRowDef="let row; columns: ['nombre','email','telefono', 'fechaNacimiento','acciones'];"></tr>
+        
+                </table>
+            </div>
+        </div>
+    }
+
+    @if(consultoPacientes && pacientes.length === 0) {
+        <div class="alert alert-app mt-3">
+            No se encontraron pacientes.
+        </div>
+    }
+</div>
+

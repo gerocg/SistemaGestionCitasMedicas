@@ -27,7 +27,7 @@ export class CambiarContrasenia {
     }
 
     this.spinner_service.show();
-    this.auth_service.CambiarContrasenia(this.contrasenia).subscribe({
+    this.auth_service.cambiarContrasenia(this.contrasenia).subscribe({
       next: (data: any) => {
       this.spinner_service.hide();
       this.toast_service.show('Cambio de contraseña exitoso!', 'success');

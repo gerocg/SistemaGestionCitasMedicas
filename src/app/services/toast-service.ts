@@ -18,13 +18,13 @@ export class ToastService {
     }, 3000);
   }
 
-  success(message: string) {
-    this.show(message, 'success');
-  }
+  // success(message: string) {
+  //   this.show(message, 'success');
+  // }
 
-  error(message: string) {
-    this.show(message, 'error');
-  }
+  // error(message: string) {
+  //   this.show(message, 'error');
+  // }
 
   remove(toast: any) {
     this._toasts.update(list =>

@@ -31,11 +31,11 @@
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>Intervalo visual del calendario</mat-label>
                     <mat-select [(ngModel)]="intervaloBase">
-                    <mat-option value="15">15 min</mat-option>
-                    <mat-option value="30">30 min</mat-option>
-                    <mat-option value="45">45 min</mat-option>
-                    <mat-option value="60">60 min</mat-option>
-                    <mat-option value="90">90 min</mat-option>
+                    <mat-option [value]="15">15 min</mat-option>
+                    <mat-option [value]="30">30 min</mat-option>
+                    <mat-option [value]="45">45 min</mat-option>
+                    <mat-option [value]="60">60 min</mat-option>
+                    <mat-option [value]="90">90 min</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
@@ -44,11 +44,11 @@
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>Duración estándar de la cita</mat-label>
                         <mat-select [(ngModel)]="duracionGenerica">
-                        <mat-option value="15">15 min</mat-option>
-                        <mat-option value="30">30 min</mat-option>
-                        <mat-option value="45">45 min</mat-option>
-                        <mat-option value="60">60 min</mat-option>
-                        <mat-option value="90">90 min</mat-option>
+                        <mat-option [value]="15">15 min</mat-option>
+                        <mat-option [value]="30">30 min</mat-option>
+                        <mat-option [value]="45">45 min</mat-option>
+                        <mat-option [value]="60">60 min</mat-option>
+                        <mat-option [value]="90">90 min</mat-option>
                         </mat-select>
                     </mat-form-field>         
             </div>

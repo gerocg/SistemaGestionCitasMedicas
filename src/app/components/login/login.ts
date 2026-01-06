@@ -36,19 +36,18 @@ export class Login {
 
   login(){
     this.spinner_service.show();
-    this.auth_service.Login(this.usuario, this.contrasenia).subscribe({
+    this.auth_service.login(this.usuario, this.contrasenia).subscribe({
       next: (data: any) => {
-      this.spinner_service.hide();
-      // console.log('Login exitoso:', data);
-      // localStorage.setItem('token', data.token);
-       this.auth_service.setSession(data.token, data.roles);
-      localStorage.setItem('ultimo_usuario', this.usuario);
-      if(data.requiereCambioContrasenia) this.router.navigate(['/inicio/cambiarContrasenia']);
-      else this.router.navigate(['/inicio']);
-      this.toast_service.show('Bienvenido!', 'success');
-      this.usuario = '';
-      this.contrasenia = '';
-
+        this.spinner_service.hide();
+        console.log('Login exitoso:', data);
+        localStorage.setItem('token', data.token);
+        this.auth_service.setSession(data.token, data.roles);
+        localStorage.setItem('ultimo_usuario', this.usuario);
+        if(data.requiereCambioContrasena) this.router.navigate(['/inicio/cambiarContrasenia']);
+        else this.router.navigate(['/inicio']);
+        this.toast_service.show('Bienvenido!', 'success');
+        this.usuario = '';
+        this.contrasenia = '';
       },
       error: (error) => {
         console.error('Error en el login:', error);

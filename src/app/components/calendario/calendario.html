@@ -1,3 +1,5 @@
-<div class="contenedor-calendario">
-  <full-calendar #calendar [options]="calendarOptions"></full-calendar>
-</div>
+@if(calendarOptions){
+  <div class="contenedor-calendario">
+    <full-calendar #calendar [options]="calendarOptions"></full-calendar>
+  </div>
+}

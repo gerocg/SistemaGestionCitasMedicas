@@ -1,0 +1,50 @@
+<div class="container mt-1">
+    <div class="card shadow-sm mb-4">
+        <div class="card-header">
+            Nuevo Paciente
+        </div>
+        
+        <div class="card-body">
+            <div class="mb-3">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Nombre</mat-label>
+                    <input matInput [(ngModel)]="nombreCompleto" name="nombreCompleto" required [disabled]="modoVista">
+                </mat-form-field>
+            </div>
+            <div class="mb-3">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>E-mail</mat-label>
+                    <input matInput type="email" [(ngModel)]="email" name="email" required [disabled]="modoVista || modoEdicion">
+                </mat-form-field>
+            </div>
+            
+            <div class="mb-3">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Teléfono</mat-label>
+                    <input matInput [(ngModel)]="telefono" name="telefono" required [disabled]="modoVista">
+                </mat-form-field>
+            </div>
+            <div class="mb-3">
+                <mat-form-field appearance="outline" class="w-100 mb-3">
+                    <mat-label>Fecha de nacimiento</mat-label>
+                    <input matInput [matDatepicker]="picker" [(ngModel)]="fechaNacimiento" name="fechaNacimiento" required [disabled]="modoVista">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+            </div>
+            
+            <div class="text-center mt-3">
+                @if (!modoEdicion && !modoVista) {
+                    <button class="btn btn-color-principal" (click)="registrarPaciente()">
+                        Registrar
+                    </button>
+                } 
+                @if(modoEdicion && !modoVista) {
+                    <button class="btn btn-color-principal" (click)="actualizarPaciente()">
+                        Guardar cambios
+                    </button>
+                }       
+            </div>
+      </div>
+  </div>
+</div>

@@ -1,75 +1,100 @@
-<h3>Citas pendientes</h3>
+<div class="container mt-1">
+  <div class="card shadow-sm mb-4">
+    <div class="card-header">
+      Historial Clínico
+    </div>
 
-@if (citasPendientes.length === 0) {
-  <div>
-    No hay citas pendientes
-  </div>
-}
-
-<ul>
-  @for (cita of citasPendientes; track cita.id_cita) {
-    <li>
-      <div>
-        <strong>{{ cita.fechaAgendado | date:'short' }}</strong>
-      </div>
-
-      <div>
-        {{ cita.comentario }}
-      </div>
-
-      @if (cita.archivos.length > 0) {
-        <div>
-          <strong>Archivos:</strong>
-          <ul>
-            @for (archivo of cita.archivos; track archivo.id_archivo) {
-              <li>
-                <a [href]="archivo.rutaArchivo" target="_blank">
-                  {{ archivo.nombreArchivo }}
-                </a>
-              </li>
+    @if(esAdminProfesional()) {
+      <div class="row g-2 p-3 align-items-end">
+        <div class="col-12 col-md-10">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Buscar paciente</mat-label>
+            <input matInput [matAutocomplete]="auto" placeholder="Ingrese su nombre..." (input)="buscarPacientes($event.target.value)">
+          </mat-form-field>
+          <mat-autocomplete #auto="matAutocomplete" [displayWith]="mostrarPaciente" (optionSelected)="seleccionarPaciente($event.option.value)">
+            @for (p of pacientes; track p) {
+              <mat-option [value]="p">
+                {{ p.nombreCompleto }}
+              </mat-option>
             }
-          </ul>
+          </mat-autocomplete>
         </div>
-      }
-    </li>
-  }
-</ul>
-
-<hr>
-
-<h3>Citas realizadas</h3>
-
-@if (citasRealizadas.length === 0) {
-  <div>
-    No hay citas realizadas
+        <div class="btn-filtro col-md-2">
+          <button class="btn btn-color-principal w-100" (click)="consultarHistorial()">Consultar</button>
+        </div>
+      </div>
+    }
   </div>
-}
 
-<ul>
-  @for (cita of citasRealizadas; track cita.id_cita) {
-    <li>
-      <div>
-        <strong>{{ cita.fechaAgendado | date:'short' }}</strong>
+  @if(pacienteSeleccionado && consultaHistorial) {
+    <div class="card shadow-sm mb-4">
+      <div class="card-header">
+        Paciente: {{ pacienteSeleccionado.nombreCompleto }}
       </div>
 
-      <div>
-        {{ cita.comentario }}
-      </div>
+      <div class="divCitas">
+          @if(citas.length === 0) {
+            <div class="alert alert-app mt-3" style="padding: 10px;">
+              No existe historial clinico para este paciente.
+            </div>
+          } 
+          @else {
+            <div class="historial-container">
+              @for(c of citas; track c) {
+                <mat-card class="cita-card mb-3" [ngClass]="c.estado.toLowerCase()">
 
-      @if (cita.archivos.length > 0) {
-        <div>
-          <strong>Archivos:</strong>
-          <ul>
-            @for (archivo of cita.archivos; track archivo.id_archivo) {
-              <li>
-                <a [href]="archivo.rutaArchivo" target="_blank">
-                  {{ archivo.nombreArchivo }}
-                </a>
-              </li>
-            }
-          </ul>
-        </div>
-      }
-    </li>
+                  <div class="cita-header">
+                    <span class="fecha">
+                      Fecha: {{ c.fecha | date:'dd/MM/yyyy HH:mm' }}
+                    </span>
+
+                    <span class="estado-badge" [ngClass]="{
+                                        'bg-success': c.estado === 'Confirmada',    
+                                        'bg-secondary': c.estado === 'Realizada',
+                                        'bg-warning text-dark': c.estado === 'Inasistencia',
+                                        'bg-danger': c.estado === 'Cancelada'}">
+                      {{ c.estado }}
+                    </span>
+                  </div>
+
+                  <div class="cita-body">
+                    <div class="dato">
+                      <label>Tratamiento</label>
+                      <p>{{ c.tratamiento || '—' }}</p>
+                    </div>
+
+                    <div class="dato">
+                      <label>Observaciones</label>
+                      <p>{{ c.observaciones || 'Sin observaciones' }}</p>
+                    </div>
+                    <div class="dato">
+                      <label>Ingrese archivos</label>
+                      <p style="font-size: 12px;">
+                        <input type="file" accept=".pdf,image/*" (change)="subirArchivo($event, c.id)">
+                      </p>
+                    </div>
+                    @if(c.archivos?.length > 0) {
+                      <div class="cita-archivos">
+                        <label>Archivos adjuntos</label>
+                        <ul>
+                          @for(a of c.archivos; track a) {
+                            <li>
+                              <i class="bi bi-paperclip"></i>
+                              <a [href]="apiUrl + a.ruta" target="_blank">{{ a.nombre }}</a>
+                              @if(esAdminProfesional()) {
+                                <span class="estado-badge btn-color-error" style="margin-left:10px;" (click)="eliminarArchivo(a.id, c.id)">Eliminar</span>
+                              }
+                            </li>
+                          }
+                        </ul>
+                      </div>
+                    }
+                  </div>
+                </mat-card>
+              }
+            </div>
+          }
+      </div>
+    </div>
   }
-</ul>
+</div>

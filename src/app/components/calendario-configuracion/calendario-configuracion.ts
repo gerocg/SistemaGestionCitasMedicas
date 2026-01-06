@@ -1,10 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ConfiguracionService } from '../../services/configuracion-service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatSelectModule} from '@angular/material/select';
+import { ToastService } from '../../services/toast-service';
+import { SpinnerService } from '../../services/spinner-service';
 
 @Component({
   selector: 'app-calendario-configuracion',
@@ -20,40 +22,80 @@ export class CalendarioConfiguracion {
   intervaloBase = 30;
   duracionGenerica = 30;
 
-  constructor(private configuracion_service: ConfiguracionService) {}
+  constructor(private configuracion_service: ConfiguracionService, private toast_service: ToastService, private spinner_service: SpinnerService) {}
 
   ngOnInit() {
     this.generarHorasLaborales();
-    const config = this.configuracion_service.getConfiguracion();
-    this.horaInicio = config.horaInicio;
-    this.horaFin = config.horaFin;
-    this.intervaloBase = config.intervaloBase;
-    this.duracionGenerica = config.duracionGenerica;
+    this.cargarConfiguracion();
   }
 
+  cargarConfiguracion() {
+    this.spinner_service.show();
+    this.configuracion_service.getConfiguracion().subscribe({
+      next: (config) => {
+        this.horaInicio = config.horaInicio;
+        this.horaFin = config.horaFin;
+        this.intervaloBase = config.intervaloBase;
+        this.duracionGenerica = config.duracionGenerica;
+        console.log(config)
+        this.spinner_service.hide();
+      },
+      error: (error) => {
+        this.spinner_service.hide();  
+        console.error(error);
+        this.toast_service.show('Error al cargar la configuración del calendario.', 'error');
+      }
+    });
+  }
+
+
   guardarConfiguracion() {
-    this.configuracion_service.setConfiguracion({
+    // if(!this.horaInicio || !this.horaFin || !this.intervaloBase || !this.duracionGenerica) {
+    //   this.toast_service.show('Debe completar todos los campos.', 'error');
+    //   return;
+    // }
+
+    // if(this.horaInicio >= this.horaFin) {
+    //   this.toast_service.show('La hora de inicio debe ser anterior a la hora de fin.', 'error');
+    //   return;
+    // }
+
+    // if(this.intervaloBase <= 0) {
+    //   this.toast_service.show('El intervalo base debe ser mayor que cero.', 'error');
+    //   return;
+    // }
+    let configNueva = {
       horaInicio: this.horaInicio,
       horaFin: this.horaFin,
       intervaloBase: this.intervaloBase,
       duracionGenerica: this.duracionGenerica
+    };
+
+    this.spinner_service.show();
+    this.configuracion_service.guardarConfiguracion(configNueva).subscribe({
+      next: () => {
+        this.spinner_service.hide();
+        this.toast_service.show('Configuración guardada correctamente.', 'success');
+      },
+      error: (error) => {
+        console.error(error);
+        this.spinner_service.hide();
+        this.toast_service.show('Error al guardar la configuración.', 'error');
+      }
     });
   }
 
   generarHorasLaborales() {
-    const horaInicio = 6;
-    const horaFin = 22;  
-    const intervalo = 30;  
-
+    let horaInicio = 6;
+    let horaFin = 22;  
+    let intervalo = 30;  
     this.horasLaborales = [];
 
     for (let minutos = horaInicio * 60; minutos <= horaFin * 60; minutos += intervalo) {
-      const h = Math.floor(minutos / 60);
-      const m = minutos % 60;
+      let h = Math.floor(minutos / 60);
+      let m = minutos % 60;
 
-      this.horasLaborales.push(
-        `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`
-      );
+      this.horasLaborales.push(`${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`);
     }
   }
 }

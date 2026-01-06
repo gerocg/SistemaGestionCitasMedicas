@@ -10,29 +10,43 @@ export class PacientesService {
     private http = inject(HttpClient);
     private urlBase = environment.apiURL + 'api/Pacientes';
 
-    GetPacientes() {
+    getPacientes() {
         return this.http.get<any>(this.urlBase + "/getPacientes");
     }
 
-    ObtenerDatosPaciente(id: number) {
-        return this.http.get<any>(this.urlBase + "/" + id);
+    getHistorialClinico(id: number) {
+        return this.http.get<any>(`${this.urlBase}/${id}/historial`);
     }
 
-    ObtenerPerfil() {
-        return this.http.get<any>(`${this.urlBase}/me`);
+    getMiHistorialClinico() {
+        return this.http.get<any>(`${this.urlBase}/me/historial`);
     }
 
-    ActualizarPerfil(payload: any) {
-        return this.http.put(`${this.urlBase}/me`, payload);
+    actualizarPaciente(id: number, data: any) {
+        return this.http.put(`${this.urlBase}/${id}`, data);
     }
 
-    getHistorialClinico() {
-        return this.http.get<any[]>(
-            `${this.urlBase}/me/historial-clinico`
-        );
+    buscarPacientes(texto: string) {
+        return this.http.get<any>(this.urlBase + "/buscar", { params: { texto } });
     }
 
-    ActualizarPaciente(data: any) {
-        return this.http.put<any>(this.urlBase + "/update", data);
+    getDatosPaciente() {
+        return this.http.get(this.urlBase + "/me");
+    }
+
+    actualizarDatos(data: any) {
+        return this.http.put(this.urlBase + "/me", data);
+    }
+
+    consultaPacientes(texto: string) {
+        return this.http.get<any>(this.urlBase + "/consulta", { params: { texto } });
+    }
+
+    crearPaciente(data: any) {
+        return this.http.post(this.urlBase + "/nuevoPaciente", data);
+    }
+
+    getPaciente(id: number) {
+        return this.http.get<any>(this.urlBase + '/' + id);
     }
 }

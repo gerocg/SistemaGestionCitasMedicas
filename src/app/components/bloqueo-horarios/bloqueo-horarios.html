@@ -1,0 +1,99 @@
+<div class="container mt-1">
+    <div class="card shadow-sm mb-4">
+        <div class="card-header">
+        Bloqueo de horarios
+        </div>
+
+        <div class="card-body row g-2">
+            <div class="col-md-4">
+                <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Desde</mat-label>
+                <input matInput [matDatepicker]="d1" [(ngModel)]="fechaDesde" (change)="onDiaCompletoChange()">
+                <mat-datepicker-toggle matSuffix [for]="d1"></mat-datepicker-toggle>
+                <mat-datepicker #d1></mat-datepicker>
+                </mat-form-field>
+            </div>
+
+            <div class="col-md-4">
+                <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Hasta</mat-label>
+                <input matInput [matDatepicker]="d2" [(ngModel)]="fechaHasta" [disabled]="diaCompleto">
+                <mat-datepicker-toggle matSuffix [for]="d2"></mat-datepicker-toggle>
+                <mat-datepicker #d2></mat-datepicker>
+                </mat-form-field>
+            </div>
+
+            <div class="col-12">
+                <mat-checkbox [(ngModel)]="diaCompleto" (change)="onDiaCompletoChange()">
+                    Bloquear día completo
+                </mat-checkbox>
+            </div>
+
+            @if (diaCompleto) {
+                <div class="alert alert-app mt-3">
+                    Se bloqueará el día completo según el horario de la agenda ({{ horaInicioConfig }} - {{ horaFinConfig }})
+                </div>
+            }
+
+
+            @if (!diaCompleto) {
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Hora desde</mat-label>
+                    <mat-select [(ngModel)]="horaDesde">
+                        @for (h of horasLaborales; track h) {
+                            <mat-option [value]="h">{{ h }}</mat-option>
+                        }
+                    </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Hora hasta</mat-label>
+                    <mat-select [(ngModel)]="horaHasta">
+                        @for(h of horasLaborales; track h) {
+                            <mat-option [value]="h">{{ h }}</mat-option>
+                        }
+                    </mat-select>
+                    </mat-form-field>
+                </div>
+            }
+
+            <div class="col-md-4">
+                <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Motivo</mat-label>
+                <input matInput [(ngModel)]="motivo">
+                </mat-form-field>
+            </div>
+
+            <div class="col-12 text-center">
+                <button class="btn btn-color-principal" (click)="guardar()">
+                Bloquear
+                </button>
+            </div>
+        </div>
+    </div>
+
+    @if(bloqueos.length > 0) {
+        <div class="card shadow-sm">
+            <div class="card-header">
+                Bloqueos existentes
+            </div>
+    
+            <ul class="list-group list-group-flush">
+                @for (b of bloqueos; track b) {
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>
+                            {{ b.fechaDesde | date:'dd/MM/yyyy HH:mm' }} - {{ b.fechaHasta | date:'dd/MM/yyyy HH:mm' }}
+                            @if(b.motivo){
+                                <small>({{ b.motivo }})</small>
+                            }
+                        </span>
+                        <button class="btn btn-color-error btn-sm" (click)="eliminar(b.id!)">Eliminar</button>
+                    </li>
+                }
+            </ul>
+        </div>
+    }
+</div>
