@@ -38,7 +38,7 @@ export class CambiarContrasenia {
       error: (error: any) => {
         console.error('Error al cambiar la contraseña:', error);
         this.spinner_service.hide();
-        this.toast_service.show('Error al cambiar la contraseña.', 'error');
+        this.toast_service.show(error?.error ?? 'Error al cambiar la contraseña.', 'error');
       }
     });
   }

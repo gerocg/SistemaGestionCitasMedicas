@@ -32,7 +32,7 @@ export class HistorialClinico implements OnInit {
 
   constructor(
     private pacientes_service: PacientesService, private spinner: SpinnerService, 
-    private toast: ToastService, private auth_service: AuthService, private cita_service: CitaService,
+    private toast_service: ToastService, private auth_service: AuthService, private cita_service: CitaService,
     private confirmacion_service: ConfirmacionService) {}
 
   ngOnInit() {
@@ -71,9 +71,9 @@ export class HistorialClinico implements OnInit {
         this.spinner.hide();
         this.citas = data.citas;
       },
-      error: () => {
+      error: (error) => {
         this.spinner.hide();
-        this.toast.show('No se pudo cargar el historial clínico', "error");
+        this.toast_service.show(error?.error ?? 'No se pudo cargar el historial clínico', 'error');
       }
     });
   }
@@ -86,9 +86,9 @@ export class HistorialClinico implements OnInit {
         this.citas = data.citas;
         this.pacienteSeleccionado = data.paciente;
       },
-      error: () => {
+      error: (error) => {
         this.spinner.hide();
-        this.toast.show('No se pudo cargar el historial clínico', "error");
+        this.toast_service.show(error?.error ?? 'No se pudo cargar el historial clínico', 'error');
       }
     });
   }
@@ -113,14 +113,13 @@ export class HistorialClinico implements OnInit {
     this.cita_service.subirArchivoCita(citaId, formData).subscribe({
       next: () => {
         this.spinner.hide();
-        this.toast.show('Archivo adjuntado correctamente', "success");
+        this.toast_service.show('Archivo adjuntado correctamente', "success");
         this.consultaHistorial = true;
         this.cargarHistorial(this.pacienteSeleccionado.id);
       },
-      error: () => {
+      error: (error) => {
         this.spinner.hide();
-        this.toast.show('Error al subir el archivo', "error");
-
+        this.toast_service.show(error?.error ?? 'Error al subir el archivo', 'error');
       }
     });
   }
@@ -137,12 +136,12 @@ export class HistorialClinico implements OnInit {
       this.cita_service.eliminarArchivo(archivoId).subscribe({
         next: () => {
           this.spinner.hide();
-          this.toast.show('Archivo eliminado correctamente', 'success');
+          this.toast_service.show('Archivo eliminado correctamente', 'success');
           this.cargarHistorial(this.pacienteSeleccionado.id);
         },
-        error: () => {
+        error: (error) => {
           this.spinner.hide();
-          this.toast.show('No se pudo eliminar el archivo', 'error');
+          this.toast_service.show(error?.error ?? 'No se pudo eliminar el archivo', 'error');
         }
       });
     });

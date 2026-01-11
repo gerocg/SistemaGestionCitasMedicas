@@ -7,6 +7,9 @@ import { Subject } from 'rxjs';
     providedIn: 'root'
 })
 export class CitaService {
+    fecha: string | null = null;
+    vieneDesdeCalendario: boolean = false;
+
     constructor() { }
     private http = inject(HttpClient);
     private urlBase = environment.apiURL + 'api/Citas';
@@ -65,5 +68,16 @@ export class CitaService {
 
     cambiarEstado(citaId: number, estado: string) {
        return this.http.put(`${this.urlBase}/${citaId}/estado`, { estado });
+    }
+
+    setearFechaHora(fecha: string) {
+        this.fecha = fecha;
+        console.log(this.fecha);
+        this.vieneDesdeCalendario = true;
+    }
+
+    limpiarFechaHora() {
+        this.fecha = null;
+        this.vieneDesdeCalendario = false;
     }
 }

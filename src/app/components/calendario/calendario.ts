@@ -2,7 +2,7 @@ import { AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild, ViewEnc
 import { FullCalendarComponent, FullCalendarModule } from '@fullcalendar/angular';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
-import interactionPlugin from '@fullcalendar/interaction';
+import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
 import esLocale from '@fullcalendar/core/locales/es';
 import { ConfiguracionService } from '../../services/configuracion-service';
 import { ConfiguracionAgenda } from '../interfaces/configuracion-agenda.interface';
@@ -14,6 +14,7 @@ import { ToastService } from '../../services/toast-service';
 import { BloqueoHorariosService } from '../../services/bloqueo-horarios.service';
 import { forkJoin } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../services/auth-service';
 
 
 @Component({
@@ -32,8 +33,7 @@ export class Calendario implements OnInit, AfterViewInit{
 
   constructor(private configuracion_service: ConfiguracionService, private cita_service: CitaService, 
     private router: Router, private spinner_service: SpinnerService, private toast_service: ToastService,
-    private bloqueo_service: BloqueoHorariosService, private cd: ChangeDetectorRef
-  ){}
+    private bloqueo_service: BloqueoHorariosService, private cd: ChangeDetectorRef, private auth_service: AuthService){}
   
   ngAfterViewInit(): void {
     this.cita_service.refrescarCalendarioObs.subscribe(() => {
@@ -55,7 +55,7 @@ export class Calendario implements OnInit, AfterViewInit{
         this.inicializarCalendario();
         this.cd.detectChanges();
       }, error: (error) => {
-        this.toast_service.show('Error al cargar configuracion.', 'error');
+        this.toast_service.show(error?.error ?? 'Error al cargar configuracion.', 'error');
         console.error('Error al cargar la configuración:', error);
       }
     });
@@ -68,12 +68,15 @@ export class Calendario implements OnInit, AfterViewInit{
       height: 'auto',
       contentHeight: 'auto',
       selectable: true,
-      editable: true,
+      editable: !this.esPaciente,
+      eventStartEditable: !this.esPaciente,
+      eventDurationEditable: !this.esPaciente,
       slotMinTime: this.configuracion.horaInicio,
       slotMaxTime: this.calcularSlotMaxTime(this.configuracion.horaFin, this.configuracion.intervaloBase),  
       slotDuration: this.mascaraDuracion(this.configuracion.intervaloBase),
       slotLabelInterval: this.mascaraDuracion(this.configuracion.intervaloBase),
       locale: esLocale,
+      validRange: this.esPaciente() ? { start: this.hoySinHora() } : undefined,
       windowResize: () => {
         setTimeout(() => this.cambioTamanioPantalla());
       },
@@ -85,13 +88,17 @@ export class Calendario implements OnInit, AfterViewInit{
         }).subscribe({
           next: ({ citas, bloqueos }) => {
             const eventosCitas: EventInput[] = citas.map((e: any) => ({
-              ...e,
+              id: e.id,
+              title: this.esPaciente() ? 'Ocupado' : e.title,
+              start: e.start,
+              end: e.end,
               classNames: [
                 e.estado === 'Realizada' || e.estado === 'Inasistencia' ? 'cita-realizada' : 'cita-confirmada'
               ],
+              editable: !this.esPaciente,
               extendedProps: {
-                ...e,
-                tipo: 'cita'
+                tipo: 'cita',
+                estado: e.estado
               }
             }));
             const eventosBloqueos: EventInput[] = bloqueos.map(b => {
@@ -123,21 +130,34 @@ export class Calendario implements OnInit, AfterViewInit{
         });
       },
       selectAllow: (selectInfo: any) => {
+        const hoy = this.hoySinHora();
+        if (selectInfo.start < hoy) {
+          return false;
+        }
         let eventos = this.calendarComponent.getApi().getEvents();
-        return !eventos.some(e => e.extendedProps?.['tipo'] === 'bloqueo' && selectInfo.start < e.end! && selectInfo.end > e.start!);
+        return !eventos.some(e => (e.extendedProps?.['tipo'] === 'bloqueo' || e.extendedProps?.['tipo'] === 'cita') && selectInfo.start < e.end! && selectInfo.end > e.start!);      
       },
       dateClick: this.onDateClick.bind(this),
       select: this.onSelect.bind(this),
       eventDrop: this.onEventDrop.bind(this),
       eventResize: this.onEventResize.bind(this),
       eventClick: this.onEventClick.bind(this),
+      eventDidMount: (info: any) => {
+        if (info.event.extendedProps?.tipo === 'bloqueo') {
+          info.el.title = info.event.extendedProps.motivo || 'Horario bloqueado';
+        }
+      }
     };
   }
 
   onEventClick(info: any) {
-    if (info.event.extendedProps?.['tipo'] === 'bloqueo') {
+    if (info.event.extendedProps?.tipo === 'bloqueo') return;
+
+    if (this.esPaciente()) {
+      this.toast_service.show('Este horario no está disponible', 'error');
       return;
     }
+   
     let citaId = info.event.id;
     let estado = info.event.extendedProps.estado;
 
@@ -147,10 +167,24 @@ export class Calendario implements OnInit, AfterViewInit{
       this.router.navigate(['/inicio/verCita', citaId], { queryParams: { mode: 'ver' } });
     }
   }
+  
+  onDateClick(arg: DateClickArg) {
+    let fechaClick = arg.date;
+    if (fechaClick < this.hoySinHora()) return;
+    let calendarApi = this.calendarComponent.getApi();
+    let eventos = calendarApi.getEvents();
 
-  onDateClick(info: any) {
-    console.log('Click en:', info.dateStr);
+    let ocupado = eventos.some(e => (e.extendedProps?.['tipo'] === 'bloqueo' || e.extendedProps?.['tipo'] === 'cita') && fechaClick >= e.start! && fechaClick < e.end!);
+
+    if (ocupado) {
+      this.toast_service.show('Horario no disponible', 'error');
+      return;
+    }
+
+    this.cita_service.setearFechaHora(arg.dateStr);
+    this.router.navigate(['/inicio/nuevaCita'], { queryParams: { mode: 'nueva' } });
   }
+
 
   onSelect(info: any) {
     let calendarApi = this.calendarComponent.getApi();
@@ -163,10 +197,7 @@ export class Calendario implements OnInit, AfterViewInit{
       calendarApi.unselect();
       return;
     }
-
-    console.log('Seleccionaste:', info.startStr, '→', info.endStr);
   }
-
 
   onEventDrop(info: any) {
     if (this.eventoCaeEnBloqueo(info)) {
@@ -175,7 +206,6 @@ export class Calendario implements OnInit, AfterViewInit{
       return;
     }
   }
-
 
   onEventResize(info: any) {
     if (this.eventoCaeEnBloqueo(info)) {
@@ -221,5 +251,15 @@ export class Calendario implements OnInit, AfterViewInit{
     let mm = (totalMin % 60).toString().padStart(2, '0');
 
     return `${hh}:${mm}`;
+  }
+
+  esPaciente(): boolean {
+    return this.auth_service.esPaciente();
+  }
+
+  hoySinHora(): Date {
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+    return hoy;
   }
 }

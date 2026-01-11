@@ -6,15 +6,29 @@
         <div class="row g-2 p-3 align-items-end">
             <div class="col-12 col-md-4">
                 <mat-form-field appearance="outline" class="w-100">
-                <mat-label>Paciente</mat-label>
-                <input matInput>
+                    <mat-label>Paciente</mat-label>
+                    <input matInput [matAutocomplete]="auto" placeholder="Buscar paciente..."  [(ngModel)]="pacienteSeleccionado" (ngModelChange)="pacienteCambio($event)">
+                    <mat-autocomplete #auto="matAutocomplete" [displayWith]="mostrarPaciente" (optionSelected)="seleccionarPaciente($event.option.value)">
+                        @for (p of pacientesFiltrados; track p) {
+                            <mat-option [value]="p">
+                                {{ p.nombreCompleto }}
+                            </mat-option>
+                        }
+                    </mat-autocomplete>
                 </mat-form-field>
             </div>
 
-            <div class="col-12 col-md-2">
+           <div class="col-12 col-md-2">
                 <mat-form-field appearance="outline" class="w-100">
-                <mat-label>Estado</mat-label>
-                <mat-select></mat-select>
+                    <mat-label>Estado</mat-label>
+                    <mat-select [(ngModel)]="filtroEstado">
+                    <mat-option [value]="null">Todos</mat-option>
+                    @for (e of estadosCita; track e.value) {
+                        <mat-option [value]="e.value">
+                        {{ e.label }}
+                        </mat-option>
+                    }
+                    </mat-select>
                 </mat-form-field>
             </div>
 

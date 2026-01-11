@@ -43,7 +43,7 @@ export class CalendarioConfiguracion {
       error: (error) => {
         this.spinner_service.hide();  
         console.error(error);
-        this.toast_service.show('Error al cargar la configuración del calendario.', 'error');
+        this.toast_service.show(error?.error ?? 'Error al cargar la configuración del calendario.', 'error');
       }
     });
   }
@@ -80,7 +80,7 @@ export class CalendarioConfiguracion {
       error: (error) => {
         console.error(error);
         this.spinner_service.hide();
-        this.toast_service.show('Error al guardar la configuración.', 'error');
+        this.toast_service.show(error?.error ?? 'Error al guardar la configuración.', 'error');
       }
     });
   }

@@ -9,6 +9,7 @@ import { MatTableModule } from '@angular/material/table';
 import { SpinnerService } from '../../services/spinner-service';
 import { PacientesService } from '../../services/pacientes-services';
 import { Router } from '@angular/router';
+import { ToastService } from '../../services/toast-service';
 
 @Component({
   selector: 'app-consulta-pacientes',
@@ -21,7 +22,8 @@ export class ConsultaPacientes {
   pacientes: any[] = [];
   consultoPacientes: boolean = false;
   
-  constructor(private paciente_service: PacientesService, private spinner_service: SpinnerService, private router: Router) {}
+  constructor(private paciente_service: PacientesService, private spinner_service: SpinnerService, 
+    private router: Router, private toast_service: ToastService) {}
 
   consultarPacientes() {
     if (!this.textoBusqueda || this.textoBusqueda.trim().length === 0) {
@@ -39,6 +41,7 @@ export class ConsultaPacientes {
       },
       error: (error: any) => {
         this.spinner_service.hide();
+        this.toast_service.show(error?.error ?? 'Error al consultar pacientes', 'error');
         console.error('Error al filtrar pacientes:', error);
         this.pacientes = [];
       }

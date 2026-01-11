@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { text } from 'stream/consumers';
 import { ConfiguracionService } from '../../services/configuracion-service';
 import { ConfiguracionAgenda } from '../interfaces/configuracion-agenda.interface';
 import { SpinnerService } from '../../services/spinner-service';
@@ -18,6 +17,8 @@ import { CitaService } from '../../services/cita-service';
 import { AuthService } from '../../services/auth-service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmacionService } from '../../services/confirmar-service';
+import { ViewChild } from '@angular/core';
+import { MatSelect } from '@angular/material/select';
 
 @Component({
   selector: 'app-nueva-cita',
@@ -25,7 +26,7 @@ import { ConfirmacionService } from '../../services/confirmar-service';
   templateUrl: './nueva-cita.html',
   styleUrl: './nueva-cita.css',
 })
-export class NuevaCita implements OnInit {
+export class NuevaCita implements OnInit  {
   pacientesFiltrados: any = [];
   pacienteSeleccionado: any = null;
   fecha: Date | null = null;
@@ -38,36 +39,52 @@ export class NuevaCita implements OnInit {
   citaId: number | null = null;
   modoEdicion = false;
   modoVista: boolean = false;
+  nuevaDesdeCalendario: boolean = false;
 
-
+  @ViewChild('horaMatSelect') horaMatSelect!: MatSelect;
 
   constructor(private configuracion_service: ConfiguracionService, private spinner_service: SpinnerService, 
     private cita_service: CitaService, private toast_service: ToastService, private auth_service: AuthService, 
     private pacientes_service: PacientesService, private activated_route: ActivatedRoute, private router: Router,
     private confirmacion_service: ConfirmacionService) {}
- 
-  ngOnInit(): void {
-    this.configuracion_service.getConfiguracion().subscribe({
-      next: (config) => {
-        this.configuracion = config;
-        this.generarHorasDisponibles();
-      }, error: (error) => {
-        this.toast_service.show('Error al cargar configuracion.', 'error');
-        console.error('Error al cargar la configuración:', error);
+  
+    ngOnInit(): void {
+      this.configuracion_service.getConfiguracion().subscribe({
+        next: (config) => {
+          this.configuracion = config;
+          this.generarHorasDisponibles();
+          if(this.nuevaDesdeCalendario){
+            this.cargarFechaHoraCalendario();
+          }
+        }, error: (error) => {
+          this.toast_service.show(error?.error ?? 'Error al cargar configuracion', 'error');
+          console.error('Error al cargar la configuración:', error);
+        }
+      });
+      
+      this.activated_route.queryParams.subscribe(params => {
+        this.modoVista = params['mode'] === 'ver';
+        this.nuevaDesdeCalendario = params['mode'] === 'nueva'
+      });
+
+      const id = this.activated_route.snapshot.paramMap.get('id');
+      if (id) {
+        this.citaId = +id;
+        this.modoEdicion = true;
+        this.cargarCita(this.citaId);
       }
-    });
+  }
 
-    this.activated_route.queryParams.subscribe(params => {
-      const mode = params['mode'];
-      this.modoVista = mode === 'ver';
-    });
+  cargarFechaHoraCalendario(){
+    if (!this.cita_service.fecha) return;
+    let fecha = new Date(this.cita_service.fecha);
+    let hora = this.formatearHora(fecha);
+        
+    if (!this.horasDisponibles.includes(hora)) return;
 
-    const id = this.activated_route.snapshot.paramMap.get('id');
-    if (id) {
-      this.citaId = +id;
-      this.modoEdicion = true;
-      this.cargarCita(this.citaId);
-    }
+    this.fecha = fecha;
+    this.hora = hora;
+    this.horaMatSelect.writeValue(hora);
   }
   
   cargarCita(id: number) {
@@ -88,19 +105,21 @@ export class NuevaCita implements OnInit {
       },
       error: (error: any) => {
         this.spinner_service.hide();
+        this.toast_service.show(error?.error ?? 'Error al cargar la cita', 'error');
         console.error('Error al cargar la cita:', error);
       }
     });
   }
 
   generarHorasDisponibles() {
-    const { horaInicio, horaFin, duracionGenerica } = this.configuracion;
-    const inicio = this.horaAminutos(horaInicio);
-    const fin = this.horaAminutos(horaFin);
-    const duracion = Number(duracionGenerica); 
-    const horas: string[] = [];
+    let { horaInicio, horaFin, intervaloBase, duracionGenerica } = this.configuracion;
+    let inicio = this.horaAminutos(horaInicio);
+    let fin = this.horaAminutos(horaFin);
+    let intervalo = Number(intervaloBase);
+    let duracion = Number(duracionGenerica);
+    let horas: string[] = [];
 
-    for (let min = inicio; min + duracion <= fin; min += duracion) {
+    for (let min = inicio; min + duracion <= fin; min += intervalo) {
       horas.push(this.minutosAhora(min));
     }
 
@@ -148,7 +167,7 @@ export class NuevaCita implements OnInit {
       error: (error: any) => {
         console.error('Error al crear la cita:', error);
         this.spinner_service.hide();
-        this.toast_service.show('Error al crear la cita.', 'error');
+        this.toast_service.show(error?.error ?? 'Error al crear configuracion', 'error');
       }
     });
   }
@@ -187,7 +206,7 @@ export class NuevaCita implements OnInit {
       error: (error) => {
         console.error(error);
         this.spinner_service.hide();
-        this.toast_service.show('Error al actualizar la cita', 'error');
+        this.toast_service.show(error?.error ?? 'Error al actualizar la cita', 'error');
       }
     });
   }
@@ -211,7 +230,7 @@ export class NuevaCita implements OnInit {
         error: (error) => {
           console.error(error);
           this.spinner_service.hide();
-          this.toast_service.show('Error al cancelar la cita', 'error');
+          this.toast_service.show(error?.error ?? 'Error al cancelar la cita', 'error');
         }
       });
     });
@@ -227,6 +246,7 @@ export class NuevaCita implements OnInit {
     this.hora = '';
     this.tratamiento = '';
     this.observaciones = '';
+    this.cita_service.limpiarFechaHora();
   }
 
   construirFechaHoraISO(fecha: Date, hora: string): string {

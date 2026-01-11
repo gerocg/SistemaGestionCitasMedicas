@@ -48,12 +48,8 @@ export class Registro {
         },
         error: (error: any) => {
           this.spinner_service.hide();
-          if (error.status === 409) {
-            this.toast_service.show('El usuario ya existe.', 'error');
-          } else {
-            console.error('Error en el registro:', error);
-            this.toast_service.show('Error en el registro', 'error');
-          }
+          this.toast_service.show(error?.error ?? 'Error en el registro', 'error');
+          console.error('Error en el registro:', error);
         }
       });
     } else {

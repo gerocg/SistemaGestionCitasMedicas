@@ -33,6 +33,7 @@ import { ConfirmacionService } from '../../services/confirmar-service';
     citas: any[] = [];
     pacientes: any[] = [];
     pacienteSeleccionado: any = null;
+    pacientesFiltrados: any[] = [];
     esPaciente = false;
     consultoCitas = false;
     estadosCita = [
@@ -58,21 +59,33 @@ import { ConfirmacionService } from '../../services/confirmar-service';
 
     buscarPacientes(texto: string) {
       if (!texto || texto.length < 3) {
-        this.pacientes = [];
+        this.pacientesFiltrados = [];
         return;
       }
 
-      this.pacientes_service.buscarPacientes(texto).subscribe(p => this.pacientes = p);
-    }
-
-    seleccionarPaciente(paciente: any) {
-      this.pacienteSeleccionado = paciente;
-      this.filtroPacienteId = paciente.id;
-      this.pacientes = [];
+      this.pacientes_service.buscarPacientes(texto).subscribe(p => this.pacientesFiltrados = p);
     }
 
     mostrarPaciente(paciente: any): string {
       return paciente ? paciente.nombreCompleto : '';
+    }
+
+    seleccionarPaciente(p: any) {
+      this.pacienteSeleccionado = p;
+      this.filtroPacienteId = p.id;
+      this.pacientesFiltrados = [];
+    }
+
+    pacienteCambio(valor: any) {
+      if (typeof valor === 'string') {
+        if (!valor) {
+          this.pacienteSeleccionado = null;
+          this.filtroPacienteId = null;
+          this.pacientesFiltrados = [];
+          return;
+        }
+        this.buscarPacientes(valor);
+      }
     }
 
     buscarCitas() {
@@ -89,6 +102,7 @@ import { ConfirmacionService } from '../../services/confirmar-service';
           },
           error: (error) =>{
             this.spinner_service.hide();
+            this.toast_service.show(error?.error ?? 'Error al filtrar citas.', 'error');
             console.error('Error al filtrar citas:', error);
           } 
         });
@@ -122,6 +136,7 @@ import { ConfirmacionService } from '../../services/confirmar-service';
         },
         error: err => {
           this.spinner_service.hide();
+          this.toast_service.show(err?.error ?? 'Error al cargar paciente actual', 'error');
           console.error('Error al cargar paciente actual', err);
         }
       });
@@ -142,9 +157,9 @@ import { ConfirmacionService } from '../../services/confirmar-service';
             this.toast_service.show("Cita cancelada exitosamente", 'success');
             this.buscarCitas();
           },
-          error: () => {
+          error: (error) => {
             this.spinner_service.hide();
-            this.toast_service.show("Error al cancelar la cita", 'error');
+            this.toast_service.show(error?.error ?? 'Error al cancelar la cita', 'error');
           }
         });
       });
@@ -172,8 +187,8 @@ import { ConfirmacionService } from '../../services/confirmar-service';
 
     cambiarEstado(citaId: number, estado: string) {
       this.confirmacion_service.confirmar({
-        titulo: 'Cancelar cita',
-        mensaje: '¿Seguro que desea cancelar esta cita?',
+        titulo: 'Estado de la cita',
+        mensaje: '¿Seguro que desea cambiar el estado de la cita?',
         textoConfirmar: 'Si',
         textoCancelar: 'No'
       }).subscribe(confirmado => {
@@ -186,10 +201,9 @@ import { ConfirmacionService } from '../../services/confirmar-service';
             this.toast_service.show("Estado cambiado exitosamente", 'success');
             this.buscarCitas();
           },
-          error: () => {
+          error: (error) => {
             this.spinner_service.hide();
-            this.toast_service.show("Error al cambiar el estado", 'error');
-            alert('No se pudo cambiar el estado');
+            this.toast_service.show(error?.error ?? 'Error al cambiar el estado', 'error');
           }
         });
       });

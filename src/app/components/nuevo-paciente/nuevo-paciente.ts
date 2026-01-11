@@ -25,7 +25,7 @@ export class NuevoPaciente implements OnInit{
   modoEdicion = false;
   modoVista: boolean = false;
 
-  constructor(private pacientes_service: PacientesService, private toast: ToastService, private router: Router, private spinner_service: SpinnerService, private activated_route: ActivatedRoute) { }
+  constructor(private pacientes_service: PacientesService, private toast_service: ToastService, private router: Router, private spinner_service: SpinnerService, private activated_route: ActivatedRoute) { }
   
   ngOnInit(): void {
     this.activated_route.queryParams.subscribe(params => {
@@ -54,6 +54,7 @@ export class NuevoPaciente implements OnInit{
       error: (error: any) => {
         this.spinner_service.hide();
         console.error('Error al cargar el paciente:', error);
+        this.toast_service.show(error?.error ?? 'Error al cargar el paciente', 'error');
       }
     });
   }
@@ -69,12 +70,12 @@ export class NuevoPaciente implements OnInit{
     this.spinner_service.show();
     this.pacientes_service.crearPaciente(dto).subscribe({
       next: () => {
-        this.toast.show('Paciente creado correctamente', 'success');
+        this.toast_service.show('Paciente creado correctamente', 'success');
         this.router.navigate(['/inicio/calendario']);
         this.spinner_service.hide();
       },
       error: (error: any) => {
-        this.toast.show('Error al crear paciente', 'error');
+        this.toast_service.show(error?.error ?? 'Error al crear paciente', 'error');
         this.spinner_service.hide();
       }
     });
@@ -92,12 +93,12 @@ export class NuevoPaciente implements OnInit{
     this.spinner_service.show();
     this.pacientes_service.actualizarPaciente(this.pacienteId, dto).subscribe({
       next: () => {
-        this.toast.show('Paciente actualizado correctamente', 'success');
+        this.toast_service.show('Paciente actualizado correctamente', 'success');
         this.router.navigate(['/inicio/calendario']);
         this.spinner_service.hide();
       },
       error: (error: any) => {
-        this.toast.show('Error al actualizar paciente', 'error');
+        this.toast_service.show(error?.error ?? 'Error al actualizar el paciente', 'error');
         this.spinner_service.hide();
       }
     });

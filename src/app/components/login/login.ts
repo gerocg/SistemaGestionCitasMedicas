@@ -52,7 +52,7 @@ export class Login {
       error: (error) => {
         console.error('Error en el login:', error);
         this.spinner_service.hide();
-        this.toast_service.show('Error en el login.', 'error');
+        this.toast_service.show(error?.error ?? 'Error en el login', 'error');
       }
     });
   }

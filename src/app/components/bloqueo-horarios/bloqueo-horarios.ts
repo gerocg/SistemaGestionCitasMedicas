@@ -55,9 +55,9 @@ export class BloqueoHorarios implements OnInit {
         this.cargarBloqueos();
         this.spinner_service.hide();
       },
-      error: () => {
+      error: (error) => {
         this.spinner_service.hide();
-        this.toast_service.show('Error al cargar configuración de agenda', 'error');
+        this.toast_service.show(error?.error ?? 'Error al cargar configuración de agenda', 'error');
       }
     });
   }
@@ -72,7 +72,7 @@ export class BloqueoHorarios implements OnInit {
       error: (error) => {
         this.spinner_service.hide();  
         console.error(error);
-        this.toast_service.show('Error al cargar los bloqueos de horarios.', 'error');
+        this.toast_service.show(error?.error ?? 'Error al cargar los bloqueos de horarios.', 'error');
       }
     });
   }
@@ -150,9 +150,9 @@ export class BloqueoHorarios implements OnInit {
         this.limpiar();
         this.cargarBloqueos();
       },
-      error: () => {
+      error: (error) => {
         this.spinner_service.hide();
-        this.toast_service.show('Error al crear bloqueo', 'error');
+        this.toast_service.show(error?.error ?? 'Error al crear bloqueo', 'error');
       }
     });
   }
@@ -169,7 +169,7 @@ export class BloqueoHorarios implements OnInit {
       error: (error) => {
         this.spinner_service.hide();
         console.error(error);
-        this.toast_service.show('Error al eliminar el bloqueo', 'error');
+        this.toast_service.show(error?.error ?? 'Error al eliminar el bloqueo', 'error');
       }
     });
   }

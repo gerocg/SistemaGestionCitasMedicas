@@ -31,9 +31,9 @@ export class RecuperarContrasenia {
         this.toast_service.show('Correo enviado con éxito', 'success');
         this.router.navigate(['/login']);
       },
-      error: () => {
+      error: (error) => {
         this.spinner_service.hide();
-        this.toast_service.show('No se pudo enviar el correo. Verifique el e-mail.', 'error');
+        this.toast_service.show(error?.error ?? 'No se pudo enviar el correo. Verifique el e-mail', 'error');
       }
     });
   }

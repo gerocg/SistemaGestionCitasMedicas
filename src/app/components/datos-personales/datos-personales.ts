@@ -53,7 +53,7 @@ ngOnInit(): void {
       error: (error: any) => {
         console.error('Error al cargar usuario:', error);
         this.spinner_service.hide();
-        this.toast_service.show('Error al cargar los datos del usuario', 'error');
+        this.toast_service.show(error?.error ?? 'Error al cargar los datos del usuario', 'error');
       }
     });
   }
@@ -68,7 +68,7 @@ ngOnInit(): void {
       error: (error: any) => {
         console.error('Error al cargar paciente:', error);
         this.spinner_service.hide();
-        this.toast_service.show('Error al cargar los datos del paciente', 'error');
+        this.toast_service.show(error?.error ?? 'Error al cargar los datos del paciente', 'error');
       }
     });
   }
@@ -106,7 +106,7 @@ ngOnInit(): void {
       error: (error: any) => {
         console.error('Error al actualizar paciente:', error);
         this.spinner_service.hide();
-        this.toast_service.show('Error al guardar los datos del paciente', 'error');
+        this.toast_service.show(error?.error ?? 'Error al guardar los datos del paciente', 'error');
       }
     });
   }
