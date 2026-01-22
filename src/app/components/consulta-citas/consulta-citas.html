@@ -57,7 +57,7 @@
     </div>
 
     @if(citas.length > 0) {
-        <div class="card shadow-sm mb-4">
+        <div class="card shadow-sm mb-4 card-citas">
             <div class="card-header">
                 Citas
             </div>    
@@ -65,21 +65,21 @@
                 <table mat-table [dataSource]="citas" class="mat-elevation-z1 w-100">
     
                 <ng-container matColumnDef="paciente">
-                    <th mat-header-cell *matHeaderCellDef> Paciente </th>
+                    <th mat-header-cell *matHeaderCellDef><strong>Paciente</strong></th>
                     <td mat-cell *matCellDef="let c">
                     {{ c.paciente.nombre }}
                     </td>
                 </ng-container>
         
                 <ng-container matColumnDef="fecha">
-                    <th mat-header-cell *matHeaderCellDef> Fecha </th>
+                    <th mat-header-cell *matHeaderCellDef><strong>Fecha</strong></th>
                     <td mat-cell *matCellDef="let c">
                     {{ c.fecha | date:'dd/MM/yyyy HH:mm' }}
                     </td>
                 </ng-container>
         
                 <ng-container matColumnDef="estado">
-                    <th mat-header-cell *matHeaderCellDef> Estado </th>
+                    <th mat-header-cell *matHeaderCellDef><strong>Estado</strong></th>
                     <td mat-cell *matCellDef="let c">
                         @if(c.estado !== 'PendienteResultado') {
                             <span class="badge"

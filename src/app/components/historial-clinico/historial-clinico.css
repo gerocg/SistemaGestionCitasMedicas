@@ -11,13 +11,16 @@
   background: #f9f9f9;
   padding: 10px;
 }
-
-.cita-card.realizada {
-  border-color: #2e8b57;
+.cita-card.inasistencia {
+  border-color: #f0ad4e;
 }
 
 .cita-card.confirmada {
-  border-color: #f0ad4e;
+  border-color: #2e8b57;
+}
+
+.cita-card.cancelada {
+  border-color: #dc3545;
 }
 
 .cita-header {

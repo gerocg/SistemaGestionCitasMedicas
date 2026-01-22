@@ -12,7 +12,7 @@
     color: #328A76;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 1000px) {
   #btnCerrarSesion {
     display: none;
   }

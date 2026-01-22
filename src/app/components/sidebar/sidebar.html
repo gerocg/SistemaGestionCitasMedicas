@@ -34,6 +34,15 @@
                 </li>
             }
 
+             @if(esAdminProfesional()) {
+                <li>
+                    <div class="item-menu" (click)="cambioMenu('reportes')">Reportes</div>
+                    <div class="sub-item" [class.show]="submenuAbierto === 'reportes'">
+                        <div><a routerLink="/inicio/reporteCitas" class="item" (click)="cerrar.emit()">Reportes de citas</a></div>
+                    </div>
+                </li>
+            }
+
             <li>
                 <div class="item-menu" (click)="cambioMenu('configuracion')">Configuración</div>
                 <div class="sub-item" [class.show]="submenuAbierto === 'configuracion'">

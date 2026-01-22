@@ -30,6 +30,7 @@ export const routes: Routes = [
             { path: 'consultaPacientes', loadComponent: () => import('./components/consulta-pacientes/consulta-pacientes').then(m => m.ConsultaPacientes) },
             { path: 'cambiarContrasenia', loadComponent: () => import('./components/cambiar-contrasenia/cambiar-contrasenia').then(m => m.CambiarContrasenia)},
             { path: 'historialClinico', loadComponent: () => import('./components/historial-clinico/historial-clinico').then(m => m.HistorialClinico)},
+            { path: 'reporteCitas', loadComponent: () => import('./components/reporte-de-citas/reporte-de-citas').then(m => m.ReporteDeCitas)},
     ]}, 
     { path: '**', redirectTo: 'login' } 
 ];

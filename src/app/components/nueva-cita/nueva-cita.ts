@@ -19,6 +19,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmacionService } from '../../services/confirmar-service';
 import { ViewChild } from '@angular/core';
 import { MatSelect } from '@angular/material/select';
+import { Cita } from '../interfaces/cita.interface';
 
 @Component({
   selector: 'app-nueva-cita',

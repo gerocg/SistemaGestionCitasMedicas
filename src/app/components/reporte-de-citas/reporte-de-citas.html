@@ -1,0 +1,143 @@
+<div class="container mt-1">
+    <div class="card shadow-sm mb-4">
+        <div class="card-header">
+            Reportes de citas
+        </div>
+        <div class="row g-2 p-3 align-items-end">
+            <div class="col-12 col-md-4">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Paciente</mat-label>
+                    <input matInput [matAutocomplete]="auto" placeholder="Buscar paciente..."  [(ngModel)]="pacienteSeleccionado" (ngModelChange)="pacienteCambio($event)">
+                    <mat-autocomplete #auto="matAutocomplete" [displayWith]="mostrarPaciente" (optionSelected)="seleccionarPaciente($event.option.value)">
+                        @for (p of pacientesFiltrados; track p) {
+                            <mat-option [value]="p">
+                                {{ p.nombreCompleto }}
+                            </mat-option>
+                        }
+                    </mat-autocomplete>
+                </mat-form-field>
+            </div>
+
+           <div class="col-12 col-md-2">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Estado</mat-label>
+                    <mat-select [(ngModel)]="filtroEstado">
+                    <mat-option [value]="null">Todos</mat-option>
+                    @for (e of estadosCita; track e.value) {
+                        <mat-option [value]="e.value">
+                        {{ e.label }}
+                        </mat-option>
+                    }
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <div class="col-12 col-md-2">
+                <mat-form-field appearance="outline" class="w-100">
+                 <mat-label>Desde</mat-label>
+                <input matInput [matDatepicker]="pickerDesde" [(ngModel)]="fechaDesde">
+                <mat-datepicker-toggle matSuffix [for]="pickerDesde"></mat-datepicker-toggle>
+                <mat-datepicker #pickerDesde></mat-datepicker>
+                </mat-form-field>
+            </div>
+
+            <div class="col-12 col-md-2">
+                <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Hasta</mat-label>
+                <input matInput [matDatepicker]="pickerHasta" [(ngModel)]="fechaHasta">
+                <mat-datepicker-toggle matSuffix [for]="pickerHasta"></mat-datepicker-toggle>
+                <mat-datepicker #pickerHasta></mat-datepicker>
+                </mat-form-field>
+            </div>
+
+            <div class="btn-filtro col-md-2">
+                <button class="btn btn-color-principal w-100" (click)="buscarReporte()">Generar reporte</button>
+            </div>
+        </div>
+    </div>
+
+    @if(resumen) {
+        <div class="card shadow-sm mb-4">
+            <div class="card-header">
+                Resumen
+            </div>
+
+            <div class="row text-center p-3">
+                <div class="col-md-3">
+                    <strong>Total</strong>
+                    <div>{{ resumen.total }}</div>
+                </div>
+                <div class="col-md-3 text-success">
+                    <strong>Realizadas</strong>
+                    <div>{{ resumen.realizadas }}</div>
+                </div>
+                <div class="col-md-3 text-danger">
+                    <strong>Canceladas</strong>
+                    <div>{{ resumen.canceladas }}</div>
+                </div>
+                <div class="col-md-3 text-warning">
+                    <strong>Inasistencias</strong>
+                    <div>{{ resumen.inasistencias }}</div>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if(detalle.length > 0) {
+        <div class="card shadow-sm mb-4 card-detalle">
+            <div class="card-header">
+                Detalle de citas
+            </div>
+
+            <div class="table-responsive">
+                <table mat-table [dataSource]="detalle" class="mat-elevation-z1 w-100">
+                    <ng-container matColumnDef="paciente">
+                        <th mat-header-cell *matHeaderCellDef><strong>Paciente</strong></th>
+                        <td mat-cell *matCellDef="let c">
+                            {{ c.nombrePaciente }}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="fecha">
+                        <th mat-header-cell *matHeaderCellDef><strong>Fecha</strong></th>
+                        <td mat-cell *matCellDef="let c">
+                            {{ c.fechaHora | date:'dd/MM/yyyy HH:mm' }}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="tratamiento">
+                        <th mat-header-cell *matHeaderCellDef><strong>Tratamiento</strong></th>
+                        <td mat-cell *matCellDef="let c">
+                            {{ c.tratamiento }}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="estado">
+                        <th mat-header-cell *matHeaderCellDef><strong>Estado</strong></th>
+                        <td mat-cell *matCellDef="let c">
+                            <span class="badge"
+                                  [ngClass]="{
+                                    'bg-secondary': c.estado === 'Realizada',
+                                    'bg-danger': c.estado === 'Cancelada',
+                                    'bg-warning text-dark': c.estado === 'Inasistencia'
+                                  }">
+                                {{ c.estado }}
+                            </span>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="['paciente','fecha','tratamiento','estado']"></tr>
+                    <tr mat-row *matRowDef="let row; columns: ['paciente','fecha','tratamiento','estado'];"></tr>
+
+                </table>
+            </div>
+        </div>
+    }
+
+    @if(consultoCitas && detalle.length === 0) {
+        <div class="alert alert-app mt-3">
+            No se encontraron resultados para los filtros seleccionados.
+        </div>
+    }
+</div>
+

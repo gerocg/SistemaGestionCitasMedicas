@@ -58,6 +58,15 @@ export class CitaService {
         return this.http.get<any[]>(`${this.urlBase}/filtrar`, { params });
     }
 
+    reporteCitas(pacienteId?: number, desde?: string, hasta?: string, estado?: string) {
+        let params: any = {};
+        if (pacienteId != null) params.pacienteId = pacienteId;
+        if (desde) params.desde = desde;
+        if (hasta) params.hasta = hasta;
+        if (estado) params.estado = estado;
+        return this.http.get<any[]>(`${this.urlBase}/reporteCitas`, { params });
+    }
+
     subirArchivoCita(citaId: number, formData: FormData) {
         return this.http.post(`${this.urlBase}/${citaId}/archivo`, formData);
     }
