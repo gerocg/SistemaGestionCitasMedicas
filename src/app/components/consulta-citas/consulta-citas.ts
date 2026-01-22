@@ -213,4 +213,8 @@ import { ConfirmacionService } from '../../services/confirmar-service';
       if (this.esPaciente) return false;
       return cita.estado === 'PendienteResultado';
     }
+
+    esAdminProfesional(): boolean {
+      return this.auth_service.esAdmin() || this.auth_service.esProfesional();
+    }
   }

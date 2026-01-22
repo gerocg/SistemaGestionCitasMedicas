@@ -66,6 +66,7 @@ export class HistorialClinico implements OnInit {
 
   cargarHistorial(id: number) {
     this.spinner.show();
+    console.log(id);
     this.pacientes_service.getHistorialClinico(id).subscribe({
       next: (data: any) => {
         this.spinner.hide();
@@ -113,9 +114,11 @@ export class HistorialClinico implements OnInit {
     this.cita_service.subirArchivoCita(citaId, formData).subscribe({
       next: () => {
         this.spinner.hide();
+        console.log('se subio');
         this.toast_service.show('Archivo adjuntado correctamente', "success");
         this.consultaHistorial = true;
-        this.cargarHistorial(this.pacienteSeleccionado.id);
+        if(this.esAdminProfesional())this.cargarHistorial(this.pacienteSeleccionado.id);
+        else this.cargarMiHistorial();
       },
       error: (error) => {
         this.spinner.hide();

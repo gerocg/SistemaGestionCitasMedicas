@@ -78,7 +78,7 @@
                         <label>Archivos adjuntos</label>
                         <ul>
                           @for(a of c.archivos; track a) {
-                            <li>
+                            <li class="mb-2">
                               <i class="bi bi-paperclip"></i>
                               <a [href]="apiUrl + a.ruta" target="_blank">{{ a.nombre }}</a>
                               @if(esAdminProfesional()) {

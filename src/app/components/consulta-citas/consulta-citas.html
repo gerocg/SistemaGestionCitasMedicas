@@ -4,21 +4,23 @@
             Consultar Citas
         </div>
         <div class="row g-2 p-3 align-items-end">
-            <div class="col-12 col-md-4">
-                <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>Paciente</mat-label>
-                    <input matInput [matAutocomplete]="auto" placeholder="Buscar paciente..."  [(ngModel)]="pacienteSeleccionado" (ngModelChange)="pacienteCambio($event)">
-                    <mat-autocomplete #auto="matAutocomplete" [displayWith]="mostrarPaciente" (optionSelected)="seleccionarPaciente($event.option.value)">
-                        @for (p of pacientesFiltrados; track p) {
-                            <mat-option [value]="p">
-                                {{ p.nombreCompleto }}
-                            </mat-option>
-                        }
-                    </mat-autocomplete>
-                </mat-form-field>
-            </div>
+            @if(esAdminProfesional()){
+                <div class="col-12 col-md-4">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Paciente</mat-label>
+                        <input matInput [matAutocomplete]="auto" placeholder="Buscar paciente..."  [(ngModel)]="pacienteSeleccionado" (ngModelChange)="pacienteCambio($event)">
+                        <mat-autocomplete #auto="matAutocomplete" [displayWith]="mostrarPaciente" (optionSelected)="seleccionarPaciente($event.option.value)">
+                            @for (p of pacientesFiltrados; track p) {
+                                <mat-option [value]="p">
+                                    {{ p.nombreCompleto }}
+                                </mat-option>
+                            }
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </div>
+            }
 
-           <div class="col-12 col-md-2">
+           <div class="col-12" [ngClass]="esAdminProfesional() ? 'col-md-2' : 'col-md-3'">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>Estado</mat-label>
                     <mat-select [(ngModel)]="filtroEstado">
@@ -32,7 +34,7 @@
                 </mat-form-field>
             </div>
 
-            <div class="col-12 col-md-2">
+            <div class="col-12" [ngClass]="esAdminProfesional() ? 'col-md-2' : 'col-md-3'">
                 <mat-form-field appearance="outline" class="w-100">
                  <mat-label>Desde</mat-label>
                 <input matInput [matDatepicker]="pickerDesde" [(ngModel)]="fechaDesde">
@@ -41,7 +43,7 @@
                 </mat-form-field>
             </div>
 
-            <div class="col-12 col-md-2">
+            <div class="col-12" [ngClass]="esAdminProfesional() ? 'col-md-2' : 'col-md-3'">
                 <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Hasta</mat-label>
                 <input matInput [matDatepicker]="pickerHasta" [(ngModel)]="fechaHasta">
@@ -50,7 +52,7 @@
                 </mat-form-field>
             </div>
 
-            <div class="btn-filtro col-md-2">
+            <div class="btn-filtro" [ngClass]="esAdminProfesional() ? 'col-md-2' : 'col-md-3'">
                 <button class="btn btn-color-principal w-100" (click)="buscarCitas()">Buscar</button>
             </div>
         </div>
