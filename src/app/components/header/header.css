@@ -9,7 +9,16 @@
 }
 
 .btn-outline-light:hover{
-    color: #328A76;
+  color: #328A76;
+}
+
+.material-icons {
+  vertical-align: middle;
+  margin-right: 5px;
+}
+
+.label{
+  vertical-align: middle;
 }
 
 @media (max-width: 1000px) {

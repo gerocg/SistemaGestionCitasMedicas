@@ -4,53 +4,131 @@
         <ul class="list-unstyled">
             <li>
                 <div class="item-menu">
-                    <a routerLink="/inicio/calendario" (click)="cerrar.emit()">Calendario</a>
+                    <a routerLink="/inicio/calendario" (click)="cerrar.emit()">
+                        <span class="material-icons">calendar_month</span>
+                        <span class="label">Calendario</span>
+                    </a>
                 </div>
             </li>
             <li>
-                <div class="item-menu" (click)="cambioMenu('citas')">Citas</div>
+                <div class="item-menu" (click)="cambioMenu('citas')">
+                    <span class="material-icons">event</span>
+                    <span class="label">Citas</span>
+                    <span class="material-icons arrow" [class.rotate]="submenuAbierto === 'citas'">expand_more</span>    
+                </div>
                 <div class="sub-item" [class.show]="submenuAbierto === 'citas'">
-                    <div><a routerLink="/inicio/nuevaCita" class="item" (click)="cerrar.emit()">Nueva</a></div>
-                    <div><a routerLink="/inicio/consultaCitas" class="item" (click)="cerrar.emit()">Consultar</a></div>
+                    <div>
+                        <a routerLink="/inicio/nuevaCita" class="item" (click)="cerrar.emit()">
+                            <span class="material-icons">add</span>
+                            Nueva
+                        </a>
+                    </div>
+                    <div>
+                        <a routerLink="/inicio/consultaCitas" class="item" (click)="cerrar.emit()">
+                            <span class="material-icons">search</span>
+                            Consultar
+                        </a>
+                    </div>
                 </div>
             </li>
             
             @if(esAdminProfesional()) {
                 <li>
-                    <div class="item-menu" (click)="cambioMenu('pacientes')">Pacientes</div>
+                    <div class="item-menu" (click)="cambioMenu('pacientes')">
+                        <span class="material-icons">people</span>
+                        <span class="label">Pacientes</span>
+                        <span class="material-icons arrow" [class.rotate]="submenuAbierto === 'pacientes'">expand_more</span>    
+                    </div>
                     <div class="sub-item" [class.show]="submenuAbierto === 'pacientes'">
-                        <div><a routerLink="/inicio/nuevoPaciente" class="item" (click)="cerrar.emit()">Nuevo</a></div>
-                        <div><a routerLink="/inicio/consultaPacientes" class="item" (click)="cerrar.emit()">Consultar</a></div>
-                        <div><a routerLink="/inicio/historialClinico" class="item" (click)="cerrar.emit()">Historial clínico</a></div>
+                        <div>
+                            <a routerLink="/inicio/nuevoPaciente" class="item" (click)="cerrar.emit()">
+                                <span class="material-icons">add</span>
+                                Nuevo
+                            </a>
+                        </div>
+                        <div>
+                            <a routerLink="/inicio/consultaPacientes" class="item" (click)="cerrar.emit()">
+                                <span class="material-icons">search</span>
+                                Consultar
+                            </a>
+                        </div>
+                        <div>
+                            <a routerLink="/inicio/historialClinico" class="item" (click)="cerrar.emit()">
+                                <span class="material-icons">history</span>
+                                Historial clínico
+                            </a>
+                        </div>
                     </div>
                 </li>
             }
             @else {
                 <li>
-                    <div class="item-menu" (click)="cambioMenu('historialClinico')">Historial clínico</div>
+                    <div class="item-menu" (click)="cambioMenu('historialClinico')">
+                        <span class="material-icons">history</span>
+                        <span class="label">Historial Clínico</span>
+                        <span class="material-icons arrow" [class.rotate]="submenuAbierto === 'historialClinico'">expand_more</span>    
+                    </div>
                     <div class="sub-item" [class.show]="submenuAbierto === 'historialClinico'">
-                        <div><a routerLink="/inicio/historialClinico" class="item" (click)="cerrar.emit()">Consultar</a></div>
+                        <div>
+                            <a routerLink="/inicio/historialClinico" class="item" (click)="cerrar.emit()">
+                                <span class="material-icons">search</span>
+                                Consultar
+                            </a>
+                        </div>
                     </div>
                 </li>
             }
 
              @if(esAdminProfesional()) {
                 <li>
-                    <div class="item-menu" (click)="cambioMenu('reportes')">Reportes</div>
+                    <div class="item-menu" (click)="cambioMenu('reportes')">
+                        <span class="material-icons">bar_chart</span>
+                        <span class="label">Reportes</span>
+                        <span class="material-icons arrow" [class.rotate]="submenuAbierto === 'reportes'">expand_more</span>    
+                    </div>
                     <div class="sub-item" [class.show]="submenuAbierto === 'reportes'">
-                        <div><a routerLink="/inicio/reporteCitas" class="item" (click)="cerrar.emit()">Reportes de citas</a></div>
+                        <div>
+                            <a routerLink="/inicio/reporteCitas" class="item" (click)="cerrar.emit()">
+                                <span class="material-icons">bar_chart</span>
+                                Reportes de citas
+                            </a>
+                        </div>
                     </div>
                 </li>
             }
 
             <li>
-                <div class="item-menu" (click)="cambioMenu('configuracion')">Configuración</div>
+                <div class="item-menu" (click)="cambioMenu('configuracion')">
+                    <span class="material-icons">settings</span>
+                    <span class="label">Configuración</span>
+                    <span class="material-icons arrow" [class.rotate]="submenuAbierto === 'configuracion'">expand_more</span>    
+                </div>
                 <div class="sub-item" [class.show]="submenuAbierto === 'configuracion'">
-                    <div><a routerLink="/inicio/datosPersonales" class="item" (click)="cerrar.emit()">Datos personales</a></div>
+                    <div>
+                        <a routerLink="/inicio/datosPersonales" class="item" (click)="cerrar.emit()">
+                            <span class="material-icons">person</span>
+                            Datos personales
+                        </a>
+                    </div>
                     @if(esAdminProfesional()) {
-                        <div><a routerLink="/inicio/calendarioConfiguracion" class="item" (click)="cerrar.emit()">Calendario</a></div>
-                        <div><a routerLink="/inicio/bloqueoHorarios" class="item" (click)="cerrar.emit()">Bloqueo horarios</a></div>
-                        <div><a routerLink="/inicio/tiposConsulta" class="item" (click)="cerrar.emit()">Tipos de consulta</a></div>
+                        <div>
+                            <a routerLink="/inicio/calendarioConfiguracion" class="item" (click)="cerrar.emit()">
+                                <span class="material-icons">calendar_today</span>
+                                Calendario
+                            </a>
+                        </div>
+                        <div>
+                            <a routerLink="/inicio/bloqueoHorarios" class="item" (click)="cerrar.emit()">
+                                <span class="material-icons">block</span>
+                                Bloqueo horarios
+                            </a>
+                        </div>
+                        <!-- <div>
+                            <a routerLink="/inicio/tiposConsulta" class="item" (click)="cerrar.emit()">
+                                <span class="material-icons">assignment</span>
+                                Tipos de consulta
+                            </a>
+                        </div> -->
                     }
                 </div>
             </li>
@@ -58,7 +136,10 @@
 
             <li>
                 <div class="item-menu">
-                    <a (click)="cerrarSesion()">Cerrar sesión</a>
+                    <a (click)="cerrarSesion()">
+                        <span class="material-icons">logout</span>
+                        <span class="label">Cerrar sesión</span>
+                    </a>
                 </div>
             </li>
         </ul>
