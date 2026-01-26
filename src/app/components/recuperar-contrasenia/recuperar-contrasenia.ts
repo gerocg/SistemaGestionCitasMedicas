@@ -20,7 +20,7 @@ export class RecuperarContrasenia {
   }
 
   recuperarContrasena() {
-    if (!this.email.trim()) {
+    if (!this.email.trim() || !this.emailValido(this.email)) {
       this.toast_service.show('Ingresá un e-mail válido', 'error');
       return;
     }
@@ -36,5 +36,10 @@ export class RecuperarContrasenia {
         this.toast_service.show(error?.error ?? 'No se pudo enviar el correo. Verifique el e-mail', 'error');
       }
     });
+  }
+
+  emailValido(email: string): boolean {
+    let valido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return valido.test(email);
   }
 }

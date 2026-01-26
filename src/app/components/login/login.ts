@@ -35,6 +35,15 @@ export class Login {
   }
 
   login(){
+    if(!this.emailValido(this.usuario)){
+      this.toast_service.show('El formato del email es incorrecto.', 'error');
+      return;
+    }
+    
+    if(!this.usuario || !this.contrasenia){
+      this.toast_service.show('Debe completar los campos requeridos.', 'error');
+      return;
+    }
     this.spinner_service.show();
     this.auth_service.login(this.usuario, this.contrasenia).subscribe({
       next: (data: any) => {
@@ -55,5 +64,10 @@ export class Login {
         this.toast_service.show(error?.error ?? 'Error en el login', 'error');
       }
     });
+  }
+
+  emailValido(email: string): boolean {
+    let valido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return valido.test(email);
   }
 }
