@@ -84,6 +84,17 @@ full-calendar {
   color: #b71c1c;
 }
 
+.fc-event.cita-ocupada {
+  background-color: #bdbdbd !important;
+  border-color: #9e9e9e !important;
+  color: #424242 !important;
+  cursor: not-allowed;
+  opacity: 0.85;
+}
+
+.fc-event.cita-ocupada .fc-event-title {
+  font-weight: 500;
+}
 
 @media (max-width: 1000px) {
   full-calendar {

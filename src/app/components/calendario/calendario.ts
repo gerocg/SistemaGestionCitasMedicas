@@ -68,9 +68,9 @@ export class Calendario implements OnInit, AfterViewInit{
       height: 'auto',
       contentHeight: 'auto',
       selectable: true,
-      editable: !this.esPaciente,
-      eventStartEditable: !this.esPaciente,
-      eventDurationEditable: !this.esPaciente,
+      editable: !this.esPaciente(),
+      eventStartEditable: !this.esPaciente(),
+      eventDurationEditable: !this.esPaciente(),
       slotMinTime: this.configuracion.horaInicio,
       slotMaxTime: this.calcularSlotMaxTime(this.configuracion.horaFin, this.configuracion.intervaloBase),  
       slotDuration: this.mascaraDuracion(this.configuracion.intervaloBase),
@@ -89,13 +89,13 @@ export class Calendario implements OnInit, AfterViewInit{
           next: ({ citas, bloqueos }) => {
             const eventosCitas: EventInput[] = citas.map((e: any) => ({
               id: e.id,
-              title: this.esPaciente() ? 'Ocupado' : e.title,
-              start: e.start,
-              end: e.end,
+              title: this.insertarTitulo(e),
+              start: e.inicio,
+              end: e.fin  ,
               classNames: [
-                e.estado === 'Realizada' || e.estado === 'Inasistencia' ? 'cita-realizada' : 'cita-confirmada'
+                  this.esPaciente() && e.pacienteId !== this.auth_service.getUserId() ? 'cita-ocupada' : e.estado === 'Realizada' || e.estado === 'Inasistencia' ? 'cita-realizada' : 'cita-confirmada'
               ],
-              editable: !this.esPaciente,
+              editable: !this.esPaciente(),
               extendedProps: {
                 tipo: 'cita',
                 estado: e.estado
@@ -261,5 +261,14 @@ export class Calendario implements OnInit, AfterViewInit{
     const hoy = new Date();
     hoy.setHours(0, 0, 0, 0);
     return hoy;
+  }
+
+  insertarTitulo(e: any): string {
+    if (this.esPaciente()) {
+      const userId = this.auth_service.getUserId();
+      console.log(e);
+      return e.pacienteId === userId ? e.titulo : 'Ocupado';
+    }
+    return e.titulo;
   }
 }
