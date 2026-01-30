@@ -117,7 +117,7 @@ export class BloqueoHorarios implements OnInit {
     }
 
     let desde = new Date(this.fechaDesde);
-    let hasta = new Date(this.fechaHasta);
+    let hasta = this.diaCompleto ? new Date(this.fechaDesde) : new Date(this.fechaHasta);
     let [hIni, mIni] = this.horaInicioConfig.split(':').map(Number);
     let [hFin, mFin] = this.horaFinConfig.split(':').map(Number);
 

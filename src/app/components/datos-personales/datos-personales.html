@@ -10,14 +10,14 @@
       <div class="mb-3">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Nombre completo</mat-label>
-          <input matInput [(ngModel)]="usuario.nombreCompleto">
+          <input matInput [(ngModel)]="usuario.nombreCompleto" required>
         </mat-form-field>
       </div>
 
       <div class="mb-3">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Email</mat-label>
-          <input matInput type="email" [(ngModel)]="usuario.email">
+          <input matInput type="email" [(ngModel)]="usuario.email" required>
         </mat-form-field>
       </div>
 
@@ -37,7 +37,7 @@
         <div class="mb-3">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Teléfono</mat-label>
-            <input matInput [(ngModel)]="paciente.telefono">
+            <input matInput [(ngModel)]="paciente.telefono" required>
           </mat-form-field>
         </div>
 

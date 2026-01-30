@@ -41,6 +41,7 @@ export class NuevaCita implements OnInit  {
   modoEdicion = false;
   modoVista: boolean = false;
   nuevaDesdeCalendario: boolean = false;
+  hoy = new Date();
 
   @ViewChild('horaMatSelect') horaMatSelect!: MatSelect;
 
@@ -112,6 +113,12 @@ export class NuevaCita implements OnInit  {
     });
   }
 
+  onFechaChange(fecha: Date | null) {
+    this.fecha = fecha;
+    this.hora = '';
+    this.generarHorasDisponibles();
+  }
+
   generarHorasDisponibles() {
     let { horaInicio, horaFin, intervaloBase, duracionGenerica } = this.configuracion;
     let inicio = this.horaAminutos(horaInicio);
@@ -120,15 +127,17 @@ export class NuevaCita implements OnInit  {
     let duracion = Number(duracionGenerica);
     let horas: string[] = [];
 
+    const ahora = new Date();
+    let esHoy = this.fecha && this.fecha.toDateString() === ahora.toDateString();
+    let aplicarFiltroHorasPasadas = esHoy && !this.puedeElegirPaciente();
+    let minutosAhora = ahora.getHours() * 60 + ahora.getMinutes();
+
     for (let min = inicio; min + duracion <= fin; min += intervalo) {
+      if (aplicarFiltroHorasPasadas && min <= minutosAhora) continue;
       horas.push(this.minutosAhora(min));
     }
 
     this.horasDisponibles = horas;
-
-    if (!this.hora && horas.length) {
-      this.hora = horas[0];
-    }
   }
 
   horaAminutos(hora: string): number {

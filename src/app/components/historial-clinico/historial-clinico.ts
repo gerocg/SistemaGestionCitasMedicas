@@ -13,6 +13,7 @@ import { MatCardModule } from '@angular/material/card';
 import { CitaService } from '../../services/cita-service';
 import { environment } from '../../../environments/environment.development';
 import { ConfirmacionService } from '../../services/confirmar-service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -33,7 +34,7 @@ export class HistorialClinico implements OnInit {
   constructor(
     private pacientes_service: PacientesService, private spinner: SpinnerService, 
     private toast_service: ToastService, private auth_service: AuthService, private cita_service: CitaService,
-    private confirmacion_service: ConfirmacionService) {}
+    private confirmacion_service: ConfirmacionService, private router: Router) {}
 
   ngOnInit() {
     if (this.auth_service.esPaciente()) {
@@ -148,6 +149,14 @@ export class HistorialClinico implements OnInit {
         }
       });
     });
+  }
+
+  irADetalleCita(id: number) {
+    if(this.esAdminProfesional()) {
+      this.router.navigate(['/inicio/editarCita', id], {queryParams: { mode: 'editar' }});
+    } else {
+      this.router.navigate(['/inicio/verCita', id], {queryParams: { mode: 'ver' }});
+    }
   }
 
 }

@@ -65,6 +65,13 @@
         }
       }
 
+      if(this.paso==2){
+        if(!this.telefonoValido(this.telefono)){
+          this.toast_service.show('El teléfono ingresado no es válido.', 'error');
+          return;
+        }
+      }
+
       if (!this.pasoValido()) {
         this.toast_service.show('Debe completar todos los campos obligatorios.', 'error');
         return;
@@ -78,7 +85,7 @@
         case 1:
           return !!this.nombre && !!this.email && this.emailValido(this.email);
         case 2:
-          return !!this.telefono && !!this.fechaNacimiento;
+          return !!this.telefono && !!this.fechaNacimiento && this.telefonoValido(this.telefono);
         case 3:
           return !!this.contrasenia && !!this.confirmarContrasenia && this.contrasenia === this.confirmarContrasenia;
         default:
@@ -89,6 +96,10 @@
     emailValido(email: string): boolean {
       let valido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       return valido.test(email);
+    }
+
+    telefonoValido(telefono: string): boolean {
+      return /^[0-9]{8,15}$/.test(telefono);
     }
 
     atras() {

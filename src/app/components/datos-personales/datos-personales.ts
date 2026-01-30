@@ -34,7 +34,7 @@ usuario: any = {
   constructor(private spinner_service: SpinnerService, private toast_service: ToastService, private auth_service: AuthService,
     private usuario_service: UsuarioService, private pacientes_service: PacientesService) {}
   
-ngOnInit(): void {
+  ngOnInit(): void {
     this.esPaciente = this.auth_service.esPaciente();
     this.cargarUsuario();
 
@@ -79,6 +79,23 @@ ngOnInit(): void {
       return;
     }
 
+    if (!this.emailValido(this.usuario.email)) {
+      this.toast_service.show('El email ingresado no es válido.', 'error');
+      return;
+    }
+
+    if (this.esPaciente) {
+      if (!this.paciente.telefono) {
+        this.toast_service.show('Debe completar los campos obligatorios', 'error');
+        return;
+      }
+
+      if (!this.telefonoValido(this.paciente.telefono)) {
+        this.toast_service.show('El teléfono ingresado no es válido.', 'error');
+        return;
+      }
+    }
+
     this.spinner_service.show();
     this.usuario_service.updateMe({nombreCompleto: this.usuario.nombreCompleto, email: this.usuario.email}).subscribe({
       next: () => {
@@ -109,5 +126,14 @@ ngOnInit(): void {
         this.toast_service.show(error?.error ?? 'Error al guardar los datos del paciente', 'error');
       }
     });
+  }
+
+  emailValido(email: string): boolean {
+    let valido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return valido.test(email);
+  }
+
+  telefonoValido(telefono: string): boolean {
+    return /^[0-9]{8,15}$/.test(telefono);
   }
 }

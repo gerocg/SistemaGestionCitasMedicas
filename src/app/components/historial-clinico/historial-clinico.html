@@ -41,7 +41,7 @@
           @else {
             <div class="historial-container">
               @for(c of citas; track c) {
-                <mat-card class="cita-card mb-3" [ngClass]="c.estado.toLowerCase()">
+                <mat-card class="cita-card mb-3" [ngClass]="c.estado.toLowerCase()" (click)="irADetalleCita(c.id)">
 
                   <div class="cita-header">
                     <span class="fecha">
@@ -70,7 +70,7 @@
                     <div class="dato">
                       <label>Ingrese archivos</label>
                       <p style="font-size: 12px;">
-                        <input type="file" accept=".pdf,image/*" (change)="subirArchivo($event, c.id)">
+                        <input type="file" accept=".pdf,image/*" (click)="$event.stopPropagation()" (change)="subirArchivo($event, c.id)">
                       </p>
                     </div>
                     @if(c.archivos?.length > 0) {
@@ -82,7 +82,7 @@
                               <i class="bi bi-paperclip"></i>
                               <a [href]="apiUrl + a.ruta" target="_blank">{{ a.nombre }}</a>
                               @if(esAdminProfesional()) {
-                                <span class="estado-badge btn-color-error" style="margin-left:10px;" (click)="eliminarArchivo(a.id, c.id)">Eliminar</span>
+                                <span class="estado-badge btn-color-error" style="cursor: pointer; margin-left:10px;" (click)="$event.stopPropagation(); eliminarArchivo(a.id, c.id)">Eliminar</span>
                               }
                             </li>
                           }

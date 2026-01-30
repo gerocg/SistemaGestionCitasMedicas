@@ -16,7 +16,7 @@
                 <div class="mb-3">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>Paciente</mat-label>
-                        <input matInput [matAutocomplete]="auto" placeholder="Buscar paciente..."  [(ngModel)]="pacienteSeleccionado" (ngModelChange)="pacienteCambio($event)" [disabled]="modoVista">
+                        <input matInput [matAutocomplete]="auto" placeholder="Buscar paciente..."  [(ngModel)]="pacienteSeleccionado" (ngModelChange)="pacienteCambio($event)" [disabled]="modoVista" required>
                         <mat-autocomplete #auto="matAutocomplete" [displayWith]="mostrarPaciente" (optionSelected)="seleccionarPaciente($event.option.value)">
                             @for (p of pacientesFiltrados; track p) {
                                 <mat-option [value]="p">
@@ -31,7 +31,7 @@
             <div class="mb-3">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>Fecha</mat-label>
-                    <input matInput [matDatepicker]="picker" [(ngModel)]="fecha" [disabled]="modoVista">
+                    <input matInput [matDatepicker]="picker" [(ngModel)]="fecha" [disabled]="modoVista" required [min]="!puedeElegirPaciente() ? hoy: null" (dateChange)="onFechaChange($event.value)">
                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker></mat-datepicker>
                 </mat-form-field>
@@ -40,7 +40,7 @@
             <div class="mb-3">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>Hora</mat-label>
-                    <mat-select [(ngModel)]="hora" [disabled]="modoVista" #horaMatSelect>
+                    <mat-select [(ngModel)]="hora" [disabled]="modoVista" #horaMatSelect required>
                     @for (h of horasDisponibles; track h) {
                         <mat-option [value]="h">{{ h }}</mat-option>
                     }

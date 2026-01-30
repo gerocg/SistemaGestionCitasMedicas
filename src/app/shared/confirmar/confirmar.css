@@ -1,0 +1,4 @@
+.btn-color-principal.mat-mdc-raised-button {
+    background-color: var(--color-principal) !important;
+    color: white !important;
+}
