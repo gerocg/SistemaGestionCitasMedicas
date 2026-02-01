@@ -1,3 +1,3 @@
 export const environment = {
-    apiURL: 'http://localhost:5200/',
+    apiURL: 'GestionAgendaAPI-env.eba-rpdj2hvw.us-east-1.elasticbeanstalk.com',
 };
