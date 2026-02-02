@@ -11,7 +11,8 @@ export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
 
-  private urlBase = environment.apiURL + '/api/Auth';
+  private urlBase = `${environment.apiURL}/api/Auth`;
+
 
 
   roles: string[] = [];
