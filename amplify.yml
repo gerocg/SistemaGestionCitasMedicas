@@ -6,7 +6,7 @@ frontend:
         - npm ci
     build:
       commands:
-        - npm run build
+        - npm run build -- --configuration production
   artifacts:
     baseDirectory: dist/proyectoFinal/browser
     files:
@@ -14,3 +14,12 @@ frontend:
   cache:
     paths:
       - node_modules/**/*
+  customHeaders:
+    - pattern: "*.js"
+      headers:
+        - key: Content-Type
+          value: application/javascript
+    - pattern: "*.mjs"
+      headers:
+        - key: Content-Type
+          value: application/javascript
