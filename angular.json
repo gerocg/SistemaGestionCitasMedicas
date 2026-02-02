@@ -13,22 +13,20 @@
         "build": {
           "builder": "@angular/build:application",
           "options": {
-  "browser": "src/main.ts",
-  "tsConfig": "tsconfig.app.json",
-  "assets": [
-    {
-      "glob": "**/*",
-      "input": "public"
-    }
-  ],
-  "styles": [
-    "@angular/material/prebuilt-themes/indigo-pink.css",
-    "node_modules/bootstrap/dist/css/bootstrap.min.css",
-    "src/styles.css"
-  ],
-  "outputPath": "dist/proyectoFinal/browser",  
-  "baseHref": "/"                              
-},
+            "browser": "src/main.ts",
+            "tsConfig": "tsconfig.app.json",
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "public"
+              }
+            ],
+            "styles": [
+              "@angular/material/prebuilt-themes/indigo-pink.css",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "src/styles.css"
+            ]
+          },
           "configurations": {
             "production": {
               "budgets": [
@@ -44,7 +42,7 @@
                 }
               ],
               "outputHashing": "all",
-              "serviceWorker": false
+              "serviceWorker": "ngsw-config.json"
             },
             "development": {
               "optimization": false,
