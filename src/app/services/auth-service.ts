@@ -1,109 +1,100 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
-import { environment } from '../../environments/environment.development';
+import { Injectable, inject } from '@angular/core';
+import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class AuthService {
-    constructor(private router: Router) { }
-    private http = inject(HttpClient);
-    private urlBase = environment.apiURL + 'api/Auth';
 
-    roles: string[] = [];
+  private http = inject(HttpClient);
+  private router = inject(Router);
 
-    login(usuario: string, contrasenia: string) {
-        return this.http.post<any>(this.urlBase + "/login", {
-            email: usuario,
-            contrasenia: contrasenia
-        });
+  private urlBase = environment.apiURL + 'api/Auth';
+
+  roles: string[] = [];
+
+  login(usuario: string, contrasenia: string) {
+    return this.http.post<any>(`${this.urlBase}/login`, {
+      email: usuario,
+      contrasenia: contrasenia
+    });
+  }
+
+  register(nombre: string, contrasenia: string, email: string, fechaNacimiento: string, telefono: string) {
+    return this.http.post<any>(`${this.urlBase}/register`, {
+      nombreCompleto: nombre,
+      email: email,
+      contrasenia: contrasenia,
+      fechaNacimiento: fechaNacimiento,
+      telefono: telefono
+    });
+  }
+
+  enviarRecuperacionContrasenaEmail(email: string) {
+    return this.http.post<any>(`${this.urlBase}/recuperarContrasena`, { email });
+  }
+
+  cambiarContrasenia(contrasenia: string) {
+    return this.http.post<any>(`${this.urlBase}/cambiarContrasenia`, {
+      nuevaContrasenia: contrasenia
+    });
+  }
+
+  setSession(token: string, roles: string[]) {
+    localStorage.setItem('token', token);
+    localStorage.setItem('roles', JSON.stringify(roles));
+    this.roles = roles;
+  }
+
+  cargarDesdeStorage() {
+    const roles = localStorage.getItem('roles');
+    this.roles = roles ? JSON.parse(roles) : [];
+  }
+
+  getRoles(): string[] {
+    if (!this.roles.length) this.cargarDesdeStorage();
+    return this.roles;
+  }
+
+  tieneRol(role: string): boolean {
+    return this.getRoles().includes(role);
+  }
+
+  esPaciente() { return this.tieneRol('Paciente'); }
+  esAdmin() { return this.tieneRol('Admin'); }
+  esProfesional() { return this.tieneRol('Profesional'); }
+
+  logout() {
+    const ultimoUsuario = localStorage.getItem('lastEmail');
+    localStorage.removeItem('token');
+    localStorage.removeItem('roles');
+    this.roles = [];
+    this.router.navigate(['/login'], { state: { email: ultimoUsuario } });
+  }
+
+  expiroToken(token: string): boolean {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      const exp = payload.exp * 1000;
+      return Date.now() > exp;
+    } catch {
+      return true;
     }
+  }
 
-    register(nombre: string, contrasenia: string, email: string, fechaNacimiento: string, telefono: string) {
-        return this.http.post<any>(this.urlBase + "/register", {
-            nombreCompleto: nombre,
-            email: email,
-            contrasenia: contrasenia,
-            fechaNacimiento: fechaNacimiento,
-            telefono: telefono
-        });
+  getUserId(): number | null {
+    const token = localStorage.getItem('token');
+    if (!token) return null;
+
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      const userId = payload.sub ?? payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
+      return userId ? Number(userId) : null;
+    } catch {
+      return null;
     }
+  }
 
-    enviarRecuperacionContrasenaEmail(email: string) {
-        return this.http.post<any>(this.urlBase + "/recuperarContrasena", {
-            email: email
-        });
-    }
-
-    cambiarContrasenia(contrasenia: string) {
-        return this.http.post<any>(this.urlBase + "/cambiarContrasenia", {
-            nuevaContrasenia: contrasenia
-        });
-    }
-
-    setSession(token: string, roles: string[]) {
-        localStorage.setItem('token', token);
-        localStorage.setItem('roles', JSON.stringify(roles));
-        this.roles = roles;
-    }
-
-    cargarDesdeStorage() {
-        const roles = localStorage.getItem('roles');
-        this.roles = roles ? JSON.parse(roles) : [];
-    }
-
-    getRoles(): string[] {
-        if (!this.roles.length) this.cargarDesdeStorage();
-        return this.roles;
-    }
-
-    tieneRol(role: string): boolean {
-        return this.getRoles().includes(role);
-    }
-
-    esPaciente() {
-        return this.tieneRol('Paciente');
-    }
-
-    esAdmin() {
-        return this.tieneRol('Admin');
-    }
-
-    esProfesional() {
-        return this.tieneRol('Profesional');
-    }
-
-    logout() {
-        let ultimoUsuario = localStorage.getItem('lastEmail');
-        localStorage.removeItem('token');
-        localStorage.removeItem('roles');
-        this.roles = [];
-        this.router.navigate(['/login'], 
-            { state: { email: ultimoUsuario } 
-        });
-    }
-
-    expiroToken(token: string): boolean {
-        try {
-            const payload = JSON.parse(atob(token.split('.')[1]));
-            const exp = payload.exp * 1000;
-            return Date.now() > exp;
-        } catch {
-            return true;
-        }
-    }
-
-    getUserId(): number | null {
-        const token = localStorage.getItem('token');
-        if (!token) return null;
-
-        try {
-            const payload = JSON.parse(atob(token.split('.')[1]));
-            const userId = payload.sub  ?? payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
-            return userId ? Number(userId) : null;
-        } catch {
-            return null;
-        }
-    }
 }
