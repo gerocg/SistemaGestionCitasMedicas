@@ -1,3 +1,3 @@
 export const environment = {
-  apiURL: 'http://GestionAgendaEntorno.eba-hunyzb3f.us-east-1.elasticbeanstalk.com'
+  apiURL: 'https://nka3ay0xqh.execute-api.us-east-1.amazonaws.com'
 };
