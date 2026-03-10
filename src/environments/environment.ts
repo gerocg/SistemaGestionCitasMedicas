@@ -4,5 +4,5 @@
 
 export const environment = {
   production: true,
-  apiUrl: '/api'  // ← relativa, ya no apunta directo a AWS
+  apiURL: '/api'  // ← relativa, ya no apunta directo a AWS
 };
