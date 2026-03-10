@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
-import { Subject } from 'rxjs';
+import { Subject, tap } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
@@ -24,7 +24,9 @@ export class CitaService {
             duracion: duracion,
             tratamiento: tratamiento,
             observaciones: observaciones
-        });
+        }).pipe(
+            tap(() => this.refrescarCalendario.next())
+        );
     }
 
     getCitas(fechaInicio: string, fechaFin: string) {
@@ -42,11 +44,15 @@ export class CitaService {
     }
 
     actualizarCita(id: number, data: any) {
-        return this.http.put(this.urlBase + '/' + id, data);
+        return this.http.put(this.urlBase + '/' + id, data).pipe(
+            tap(() => this.refrescarCalendario.next())
+        );
     }
 
     eliminarCita(id: number) {
-        return this.http.delete(this.urlBase + '/' + id);
+        return this.http.delete(this.urlBase + '/' + id).pipe(
+            tap(() => this.refrescarCalendario.next())
+        );
     }
 
     filtrarCitas(pacienteId?: number, desde?: string, hasta?: string, estado?: string) {
