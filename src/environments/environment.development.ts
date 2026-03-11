@@ -1,3 +1,3 @@
 export const environment = {
-  apiURL: 'http://localhost:5200/'
+  apiURL: 'https://nka3ay0xqh.execute-api.us-east-1.amazonaws.com/'
 };
