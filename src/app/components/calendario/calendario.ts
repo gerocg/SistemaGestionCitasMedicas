@@ -25,7 +25,7 @@ import { AuthService } from '../../services/auth-service';
   encapsulation: ViewEncapsulation.None
 })
 
-export class Calendario implements OnInit, AfterViewInit{
+export class Calendario implements OnInit{
   
   @ViewChild('calendar') calendarComponent!: FullCalendarComponent;
   calendarOptions: any;
@@ -34,20 +34,7 @@ export class Calendario implements OnInit, AfterViewInit{
   constructor(private configuracion_service: ConfiguracionService, private cita_service: CitaService, 
     private router: Router, private spinner_service: SpinnerService, private toast_service: ToastService,
     private bloqueo_service: BloqueoHorariosService, private cd: ChangeDetectorRef, private auth_service: AuthService){}
-  
-  ngAfterViewInit(): void {
-    this.cita_service.refrescarCalendarioObs.subscribe(() => {
-      if (!this.calendarComponent) {
-        console.warn('CalendarComponent todavía no está listo');
-        return;
-      }
-      const calendarApi = this.calendarComponent.getApi();
-      console.log('Refrescando eventos del calendario');
-      calendarApi.refetchEvents();
-    });
-
-  }
-  
+    
   ngOnInit(): void {
     this.configuracion_service.getConfiguracion().subscribe({
       next: (config) => {
