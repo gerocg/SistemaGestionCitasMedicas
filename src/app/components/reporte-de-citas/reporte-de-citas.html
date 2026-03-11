@@ -67,15 +67,19 @@
                     <strong>Total</strong>
                     <div>{{ resumen.total }}</div>
                 </div>
-                <div class="col-md-3 text-success">
+                <div class="col-md-2 text-secondary">
+                    <strong>Pendiente de resultado</strong>
+                    <div>{{ resumen.pendientesDeResultado }}</div>
+                </div>
+                <div class="col-md-2 text-success">
                     <strong>Realizadas</strong>
                     <div>{{ resumen.realizadas }}</div>
                 </div>
-                <div class="col-md-3 text-danger">
+                <div class="col-md-2 text-danger">
                     <strong>Canceladas</strong>
                     <div>{{ resumen.canceladas }}</div>
                 </div>
-                <div class="col-md-3 text-warning">
+                <div class="col-md-2 text-warning">
                     <strong>Inasistencias</strong>
                     <div>{{ resumen.inasistencias }}</div>
                 </div>
@@ -117,9 +121,10 @@
                         <td mat-cell *matCellDef="let c">
                             <span class="badge"
                                   [ngClass]="{
-                                    'bg-secondary': c.estado === 'Realizada',
+                                    'bg-success': c.estado === 'Realizada',
                                     'bg-danger': c.estado === 'Cancelada',
-                                    'bg-warning text-dark': c.estado === 'Inasistencia'
+                                    'bg-warning text-dark': c.estado === 'Inasistencia',
+                                    'bg-secondary': c.estado === 'PendienteResultado'  
                                   }">
                                 {{ c.estado }}
                             </span>

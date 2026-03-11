@@ -86,10 +86,10 @@
                         @if(c.estado !== 'PendienteResultado') {
                             <span class="badge"
                                     [ngClass]="{
-                                        'bg-success': c.estado === 'Confirmada',
-                                        'bg-secondary': c.estado === 'Realizada',
-                                        'bg-warning text-dark': c.estado === 'Inasistencia',
+                                        'bg-secondary': c.estado === 'Confirmada',
+                                        'bg-success': c.estado === 'Realizada',
                                         'bg-danger': c.estado === 'Cancelada',
+                                        'bg-warning text-dark': c.estado === 'Inasistencia'
                                     }">
                                 {{ c.estado }}
                             </span>
